@@ -7,7 +7,6 @@ if CoreGui:FindFirstChild("NoOneUI") then CoreGui.NoOneUI:Destroy() end
 
 local NEON = Color3.fromRGB(0, 255, 100)
 local BG_DARK = Color3.fromRGB(8, 8, 10)
-local BG_DARKER = Color3.fromRGB(5, 5, 7)
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "NoOneUI"
@@ -26,18 +25,6 @@ local function PlayClick()
     ClickSound:Play()
 end
 
-local Shadow = Instance.new("Frame")
-Shadow.Size = UDim2.new(0, 620, 0, 370)
-Shadow.Position = UDim2.new(0.5, -300, 0.5, -165)
-Shadow.BackgroundColor3 = Color3.new(0, 0, 0)
-Shadow.BackgroundTransparency = 0.5
-Shadow.BorderSizePixel = 0
-Shadow.ZIndex = 0
-Shadow.Parent = ScreenGui
-local SC = Instance.new("UICorner")
-SC.CornerRadius = UDim.new(0, 16)
-SC.Parent = Shadow
-
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 600, 0, 350)
@@ -46,7 +33,7 @@ MainFrame.BackgroundColor3 = BG_DARK
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
 MainFrame.Draggable = true
-MainFrame.ZIndex = 1
+MainFrame.ZIndex = 10
 MainFrame.Parent = ScreenGui
 
 local MC = Instance.new("UICorner")
@@ -83,8 +70,8 @@ task.spawn(function()
 end)
 
 local TopBar = Instance.new("Frame")
-TopBar.Size = UDim2.new(1, 0, 0, 55)
-TopBar.BackgroundColor3 = BG_DARKER
+TopBar.Size = UDim2.new(1, 0, 0, 60)
+TopBar.BackgroundColor3 = Color3.fromRGB(5, 5, 7)
 TopBar.BackgroundTransparency = 0.2
 TopBar.BorderSizePixel = 0
 TopBar.ZIndex = 2
@@ -94,9 +81,17 @@ local TC = Instance.new("UICorner")
 TC.CornerRadius = UDim.new(0, 14)
 TC.Parent = TopBar
 
+local TopFix = Instance.new("Frame")
+TopFix.Size = UDim2.new(1, 0, 0, 14)
+TopFix.Position = UDim2.new(0, 0, 1, -14)
+TopFix.BackgroundColor3 = Color3.fromRGB(5, 5, 7)
+TopFix.BorderSizePixel = 0
+TopFix.ZIndex = 3
+TopFix.Parent = TopBar
+
 local Sep = Instance.new("Frame")
 Sep.Size = UDim2.new(1, -20, 0, 1)
-Sep.Position = UDim2.new(0, 10, 0, 55)
+Sep.Position = UDim2.new(0, 10, 0, 60)
 Sep.BackgroundColor3 = NEON
 Sep.BorderSizePixel = 0
 Sep.ZIndex = 3
@@ -111,15 +106,15 @@ SepGrad.Transparency = NumberSequence.new({
 SepGrad.Parent = Sep
 
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(0, 300, 1, 0)
-Title.Position = UDim2.new(0, 25, 0, 0)
+Title.Size = UDim2.new(0, 300, 0, 32)
+Title.Position = UDim2.new(0, 25, 0, 8)
 Title.BackgroundTransparency = 1
 Title.Text = "No One"
 Title.TextColor3 = Color3.new(1, 1, 1)
 Title.TextSize = 26
 Title.Font = Enum.Font.GothamBlack
 Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.ZIndex = 3
+Title.ZIndex = 4
 Title.Parent = TopBar
 
 local TitleGrad = Instance.new("UIGradient")
@@ -163,20 +158,40 @@ end)
 
 local Subtitle = Instance.new("TextLabel")
 Subtitle.Size = UDim2.new(0, 300, 0, 14)
-Subtitle.Position = UDim2.new(0, 27, 0, 38)
+Subtitle.Position = UDim2.new(0, 27, 0, 40)
 Subtitle.BackgroundTransparency = 1
 Subtitle.Text = "by devscripts0"
 Subtitle.TextColor3 = Color3.fromRGB(0, 130, 60)
 Subtitle.TextSize = 11
 Subtitle.Font = Enum.Font.GothamMedium
 Subtitle.TextXAlignment = Enum.TextXAlignment.Left
-Subtitle.ZIndex = 3
+Subtitle.ZIndex = 4
 Subtitle.Parent = TopBar
+
+local Dot = Instance.new("Frame")
+Dot.Size = UDim2.new(0, 9, 0, 9)
+Dot.Position = UDim2.new(0, 220, 0.5, -4)
+Dot.BackgroundColor3 = NEON
+Dot.BorderSizePixel = 0
+Dot.ZIndex = 4
+Dot.Parent = TopBar
+
+local DotCorner = Instance.new("UICorner")
+DotCorner.CornerRadius = UDim.new(1, 0)
+DotCorner.Parent = Dot
+
+task.spawn(function()
+    while Dot.Parent do
+        TweenService:Create(Dot, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundTransparency = 0.8, Size = UDim2.new(0, 7, 0, 7)}):Play()
+        task.wait(1)
+        TweenService:Create(Dot, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundTransparency = 0, Size = UDim2.new(0, 9, 0, 9)}):Play()
+        task.wait(1)
+    end
+end)
 
 _G.NoOneUI = {
     ScreenGui = ScreenGui,
     MainFrame = MainFrame,
-    Shadow = Shadow,
     NEON = NEON,
     PlayClick = PlayClick,
 }
@@ -194,8 +209,8 @@ local TEXT_DIM = Color3.fromRGB(160, 160, 170)
 local TEXT_BRIGHT = Color3.fromRGB(240, 240, 245)
 
 local SideBar = Instance.new("Frame")
-SideBar.Size = UDim2.new(0, 170, 1, -56)
-SideBar.Position = UDim2.new(0, 0, 0, 56)
+SideBar.Size = UDim2.new(0, 170, 1, -61)
+SideBar.Position = UDim2.new(0, 0, 0, 61)
 SideBar.BackgroundColor3 = Color3.fromRGB(8, 8, 10)
 SideBar.BackgroundTransparency = 0.4
 SideBar.BorderSizePixel = 0
@@ -212,21 +227,18 @@ SideLine.ZIndex = 3
 SideLine.Parent = SideBar
 
 local ContentFrame = Instance.new("Frame")
-ContentFrame.Size = UDim2.new(1, -170, 1, -56)
-ContentFrame.Position = UDim2.new(0, 170, 0, 56)
+ContentFrame.Size = UDim2.new(1, -170, 1, -61)
+ContentFrame.Position = UDim2.new(0, 170, 0, 61)
 ContentFrame.BackgroundTransparency = 1
 ContentFrame.ClipsDescendants = true
 ContentFrame.ZIndex = 2
 ContentFrame.Parent = MainFrame
 
--- ============ 3 СТРАНИЦЫ ============
 local Pages = {}
-
 local function MakePage(name)
     local page = Instance.new("Frame")
     page.Name = name .. "Page"
     page.Size = UDim2.new(1, 0, 1, 0)
-    page.Position = UDim2.new(0, 0, 0, 0)
     page.BackgroundTransparency = 1
     page.Visible = false
     page.ZIndex = 3
@@ -239,56 +251,76 @@ local MainPage = MakePage("Main")
 local VisualPage = MakePage("Visual")
 local SkinPage = MakePage("SkinChanger")
 
--- Заголовки для каждой страницы
-local function MakeHeader(page, title, sub)
+local function MakeHeader(page, title, sub, icon)
+    local iconBg = Instance.new("Frame")
+    iconBg.Size = UDim2.new(0, 28, 0, 28)
+    iconBg.Position = UDim2.new(0, 20, 0, 18)
+    iconBg.BackgroundColor3 = Color3.fromRGB(0, 40, 20)
+    iconBg.BorderSizePixel = 0
+    iconBg.ZIndex = 4
+    iconBg.Parent = page
+    local ibc = Instance.new("UICorner")
+    ibc.CornerRadius = UDim.new(1, 0)
+    ibc.Parent = iconBg
+    local ibs = Instance.new("UIStroke")
+    ibs.Color = NEON
+    ibs.Thickness = 1
+    ibs.Transparency = 0.3
+    ibs.Parent = iconBg
+    local il = Instance.new("TextLabel")
+    il.Size = UDim2.new(1, 0, 1, 0)
+    il.BackgroundTransparency = 1
+    il.Text = icon
+    il.TextColor3 = NEON
+    il.TextSize = 14
+    il.Font = Enum.Font.GothamBold
+    il.ZIndex = 5
+    il.Parent = iconBg
+
     local h = Instance.new("TextLabel")
-    h.Size = UDim2.new(1, -40, 0, 20)
-    h.Position = UDim2.new(0, 20, 0, 15)
+    h.Size = UDim2.new(1, -60, 0, 20)
+    h.Position = UDim2.new(0, 60, 0, 16)
     h.BackgroundTransparency = 1
     h.Text = title
     h.TextColor3 = TEXT_BRIGHT
     h.TextSize = 18
     h.Font = Enum.Font.GothamBold
     h.TextXAlignment = Enum.TextXAlignment.Left
-    h.ZIndex = 3
+    h.ZIndex = 4
     h.Parent = page
 
     local s = Instance.new("TextLabel")
-    s.Size = UDim2.new(1, -40, 0, 16)
-    s.Position = UDim2.new(0, 20, 0, 36)
+    s.Size = UDim2.new(1, -60, 0, 16)
+    s.Position = UDim2.new(0, 60, 0, 36)
     s.BackgroundTransparency = 1
     s.Text = sub
     s.TextColor3 = TEXT_DIM
-    s.TextSize = 12
+    s.TextSize = 11
     s.Font = Enum.Font.Gotham
     s.TextXAlignment = Enum.TextXAlignment.Left
-    s.ZIndex = 3
+    s.ZIndex = 4
     s.Parent = page
 
     local line = Instance.new("Frame")
     line.Size = UDim2.new(1, -40, 0, 1)
-    line.Position = UDim2.new(0, 20, 0, 65)
+    line.Position = UDim2.new(0, 20, 0, 62)
     line.BackgroundColor3 = Color3.fromRGB(30, 40, 32)
     line.BorderSizePixel = 0
-    line.ZIndex = 3
+    line.ZIndex = 4
     line.Parent = page
 end
 
-MakeHeader(MainPage, "Main", "Aim, weapons and movement")
-MakeHeader(VisualPage, "Visual", "ESP, tracers and outlines")
-MakeHeader(SkinPage, "Skin Changer", "Skins, knives and cosmetics")
+MakeHeader(MainPage, "Main", "Aim, weapons and movement", "⚙")
+MakeHeader(VisualPage, "Visual", "ESP, tracers and outlines", "👁")
+MakeHeader(SkinPage, "Skin Changer", "Skins, knives and cosmetics", "🎨")
 
--- ============ ФУНКЦИЯ СОЗДАНИЯ КНОПКИ-ТУМБЛЕРА ============
-local function MakeToggle(parent, text, pos)
+local function MakeLongToggle(parent, text, yPos, iconText)
     local Btn = Instance.new("TextButton")
-    Btn.Size = UDim2.new(0, 110, 0, 110)
-    Btn.Position = pos
+    Btn.Size = UDim2.new(1, -40, 0, 50)
+    Btn.Position = UDim2.new(0, 20, 0, yPos)
     Btn.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
     Btn.BorderSizePixel = 0
-    Btn.Text = text
-    Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Btn.TextSize = 15
-    Btn.Font = Enum.Font.GothamBold
+    Btn.Text = ""
     Btn.AutoButtonColor = false
     Btn.ZIndex = 5
     Btn.Parent = parent
@@ -303,6 +335,55 @@ local function MakeToggle(parent, text, pos)
     S.Transparency = 0.3
     S.Parent = Btn
 
+    local IconBg = Instance.new("Frame")
+    IconBg.Size = UDim2.new(0, 32, 0, 32)
+    IconBg.Position = UDim2.new(0, 10, 0.5, -16)
+    IconBg.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+    IconBg.BorderSizePixel = 0
+    IconBg.ZIndex = 6
+    IconBg.Parent = Btn
+    local ibc = Instance.new("UICorner")
+    ibc.CornerRadius = UDim.new(1, 0)
+    ibc.Parent = IconBg
+    local ibs = Instance.new("UIStroke")
+    ibs.Color = Color3.fromRGB(60, 60, 60)
+    ibs.Thickness = 1
+    ibs.Transparency = 0.4
+    ibs.Parent = IconBg
+
+    local IL = Instance.new("TextLabel")
+    IL.Size = UDim2.new(1, 0, 1, 0)
+    IL.BackgroundTransparency = 1
+    IL.Text = iconText
+    IL.TextColor3 = Color3.fromRGB(200, 200, 200)
+    IL.TextSize = 16
+    IL.Font = Enum.Font.Gotham
+    IL.ZIndex = 7
+    IL.Parent = IconBg
+
+    local TL = Instance.new("TextLabel")
+    TL.Size = UDim2.new(1, -100, 1, 0)
+    TL.Position = UDim2.new(0, 52, 0, 0)
+    TL.BackgroundTransparency = 1
+    TL.Text = text
+    TL.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TL.TextSize = 15
+    TL.Font = Enum.Font.GothamBold
+    TL.TextXAlignment = Enum.TextXAlignment.Left
+    TL.ZIndex = 6
+    TL.Parent = Btn
+
+    local StateDot = Instance.new("Frame")
+    StateDot.Size = UDim2.new(0, 10, 0, 10)
+    StateDot.Position = UDim2.new(1, -25, 0.5, -5)
+    StateDot.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    StateDot.BorderSizePixel = 0
+    StateDot.ZIndex = 6
+    StateDot.Parent = Btn
+    local sdc = Instance.new("UICorner")
+    sdc.CornerRadius = UDim.new(1, 0)
+    sdc.Parent = StateDot
+
     Btn.MouseEnter:Connect(function()
         TweenService:Create(S, TweenInfo.new(0.3), {Color = NEON, Transparency = 0}):Play()
     end)
@@ -312,15 +393,13 @@ local function MakeToggle(parent, text, pos)
         end
     end)
 
-    return Btn, S
+    return Btn, S, StateDot, IL, IconBg, ibs
 end
 
--- Кнопки в VisualPage
-local ESPBtn, ESPStroke = MakeToggle(VisualPage, "ESP", UDim2.new(0, 20, 0, 90))
-local TracersBtn, TracersStroke = MakeToggle(VisualPage, "TRACERS", UDim2.new(0, 150, 0, 90))
+local ESPBtn, ESPStroke, ESPDot, ESPIcon, ESPIconBg, ESPIconStroke = MakeLongToggle(VisualPage, "ESP", 85, "🎯")
+local TracersBtn, TracersStroke, TracersDot, TracersIcon, TracersIconBg, TracersIconStroke = MakeLongToggle(VisualPage, "TRACERS", 145, "📡")
 
--- ============ ВКЛАДКИ SIDEBAR ============
-local function CreateTabButton(name, icon, yOffset, pageName)
+local function CreateTabButton(name, icon, yOffset)
     local Btn = Instance.new("TextButton")
     Btn.Name = name .. "Tab"
     Btn.Size = UDim2.new(1, -20, 0, 44)
@@ -443,7 +522,6 @@ local function ActivateTab(tabName)
             Transparency = act and 0 or 0.3
         }):Play()
 
-        -- Показываем только активную страницу
         if data.Page and Pages[data.Page] then
             Pages[data.Page].Visible = act
         end
@@ -451,7 +529,7 @@ local function ActivateTab(tabName)
 end
 
 for _, t in ipairs(Tabs) do
-    local b, l, i, il, ibs, ibg = CreateTabButton(t.Name, t.Icon, t.Offset, t.Page)
+    local b, l, i, il, ibs, ibg = CreateTabButton(t.Name, t.Icon, t.Offset)
     TabButtons[t.Name] = {
         Button=b, Label=l, Indicator=i, IconLabel=il,
         IconBgStroke=ibs, IconBg=ibg, Page=t.Page
@@ -463,17 +541,23 @@ end
 
 ActivateTab("Main")
 
--- Скрываем частицы внутри окна (убираем баг с прозрачной хренью)
 UI.TabButtons = TabButtons
 UI.ActivateTab = ActivateTab
 UI.Pages = Pages
 UI.ContentFrame = ContentFrame
-UI.RunService = RunService
 UI.TweenService = TweenService
 UI.ESPButton = ESPBtn
 UI.ESPStroke = ESPStroke
+UI.ESPDot = ESPDot
+UI.ESPIcon = ESPIcon
+UI.ESPIconBg = ESPIconBg
+UI.ESPIconStroke = ESPIconStroke
 UI.TracersButton = TracersBtn
 UI.TracersStroke = TracersStroke
+UI.TracersDot = TracersDot
+UI.TracersIcon = TracersIcon
+UI.TracersIconBg = TracersIconBg
+UI.TracersIconStroke = TracersIconStroke
 
 print("Part 2/3 loaded.")
 -- No One | Part 3/3
@@ -487,14 +571,22 @@ if not _G.NoOneUI then warn("Сначала Part 1 и 2!") return end
 
 local UI = _G.NoOneUI
 local MainFrame = UI.MainFrame
-local Shadow = UI.Shadow
 local NEON = UI.NEON
 local ESPBtn = UI.ESPButton
 local ESPStroke = UI.ESPStroke
+local ESPDot = UI.ESPDot
+local ESPIcon = UI.ESPIcon
+local ESPIconBg = UI.ESPIconBg
+local ESPIconStroke = UI.ESPIconStroke
+
 local TracersBtn = UI.TracersButton
 local TracersStroke = UI.TracersStroke
+local TracersDot = UI.TracersDot
+local TracersIcon = UI.TracersIcon
+local TracersIconBg = UI.TracersIconBg
+local TracersIconStroke = UI.TracersIconStroke
 
--- ============ ФУТЕР ============
+-- ФУТЕР
 local Footer = Instance.new("TextLabel")
 Footer.Size = UDim2.new(1, -20, 0, 20)
 Footer.Position = UDim2.new(0, 10, 1, -24)
@@ -507,59 +599,90 @@ Footer.TextXAlignment = Enum.TextXAlignment.Right
 Footer.ZIndex = 10
 Footer.Parent = MainFrame
 
--- ============ АНИМАЦИЯ ОКНА ============
+-- АНИМАЦИЯ ПОЯВЛЕНИЯ
 MainFrame.Size = UDim2.new(0, 0, 0, 0)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-Shadow.Size = UDim2.new(0, 0, 0, 0)
-Shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
 
 TweenService:Create(MainFrame, TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
     Size = UDim2.new(0, 600, 0, 350),
     Position = UDim2.new(0.5, -300, 0.5, -175)
 }):Play()
-TweenService:Create(Shadow, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 620, 0, 370),
-    Position = UDim2.new(0.5, -300, 0.5, -165)
-}):Play()
 
--- ============ НАСТРОЙКИ ESP ============
+-- ============ ЦВЕТА ============
+local TEAM_FOLDER = "Counter-Terrorists"
+local ENEMY_FOLDER = "Terrorists"
+
 local ESPColor_Team = Color3.fromRGB(0, 120, 255)   -- синий
 local ESPColor_Enemy = Color3.fromRGB(255, 40, 40)  -- красный
+
 local ActiveESP = {}
 local Tracers = {}
 local ESPEnabled = false
 local TracersEnabled = false
 
-local function IsTeammate(p)
-    if p == LocalPlayer then return true end
-    if p.Team == nil or LocalPlayer.Team == nil then return false end
-    return p.Team == LocalPlayer.Team
+-- ============ ОПРЕДЕЛЕНИЕ КОМАНДЫ ПО ПАПКЕ ============
+-- В BloxStrike команды разделены по папкам в Workspace.Characters
+local function GetTeamFolder(player)
+    local char = player.Character
+    if not char then return nil end
+    local parent = char.Parent
+    if not parent then return nil end
+    return parent.Name
 end
 
--- ============ ESP ============
+local function IsTeammate(player)
+    if player == LocalPlayer then return true end
+
+    local myFolder = GetTeamFolder(LocalPlayer)
+    local hisFolder = GetTeamFolder(player)
+    if not myFolder or not hisFolder then return false end
+
+    -- Оба в одной папке — тиммейты
+    return myFolder == hisFolder
+end
+
+local function GetESPColor(player)
+    if IsTeammate(player) then
+        return ESPColor_Team
+    else
+        return ESPColor_Enemy
+    end
+end
+
+-- ============ ESP через SelectionBox ============
 local function CreateESP(player)
     if player == LocalPlayer then return end
     if ActiveESP[player] then return end
     local char = player.Character
     if not char then return end
-    local h = Instance.new("Highlight")
-    h.Adornee = char
-    h.FillTransparency = 1
-    h.OutlineTransparency = 0.15
-    h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-    if IsTeammate(player) then
-        h.FillColor = ESPColor_Team
-        h.OutlineColor = ESPColor_Team
-    else
-        h.FillColor = ESPColor_Enemy
-        h.OutlineColor = ESPColor_Enemy
+
+    local folder = Instance.new("Folder")
+    folder.Name = "NoOne_ESP"
+    folder.Parent = char
+
+    local color = GetESPColor(player)
+    local boxes = {}
+    for _, part in ipairs(char:GetChildren()) do
+        if part:IsA("BasePart") then
+            local box = Instance.new("SelectionBox")
+            box.Adornee = part
+            box.LineThickness = 0.08
+            box.Transparency = 0.1
+            box.SurfaceTransparency = 1
+            box.Color3 = color
+            box.Parent = folder
+            table.insert(boxes, box)
+        end
     end
-    h.Parent = char
-    ActiveESP[player] = h
+
+    ActiveESP[player] = {folder = folder, boxes = boxes}
 end
 
 local function RemoveESP(p)
-    if ActiveESP[p] then ActiveESP[p]:Destroy() ActiveESP[p] = nil end
+    if ActiveESP[p] then
+        ActiveESP[p].folder:Destroy()
+        ActiveESP[p] = nil
+    end
 end
 
 -- ============ TRACERS ============
@@ -570,7 +693,7 @@ local function CreateTracer(player)
     l.Thickness = 1
     l.Transparency = 0.85
     l.Visible = false
-    l.Color = IsTeammate(player) and ESPColor_Team or ESPColor_Enemy
+    l.Color = GetESPColor(player)
     Tracers[player] = l
 end
 
@@ -602,10 +725,12 @@ local function Setup(p)
     if TracersEnabled then CreateTracer(p) end
 
     p.CharacterAdded:Connect(function()
-        task.wait(0.4)
+        task.wait(0.5)
         if ESPEnabled then RemoveESP(p) CreateESP(p) end
     end)
     p.CharacterRemoving:Connect(function() RemoveESP(p) end)
+
+    -- Следим за сменой команды через перерождение
     p:GetPropertyChangedSignal("Team"):Connect(function()
         task.wait(0.1)
         if ESPEnabled then
@@ -613,7 +738,7 @@ local function Setup(p)
             if p.Character then CreateESP(p) end
         end
         if Tracers[p] then
-            Tracers[p].Color = IsTeammate(p) and ESPColor_Team or ESPColor_Enemy
+            Tracers[p].Color = GetESPColor(p)
         end
     end)
 end
@@ -625,11 +750,27 @@ Players.PlayerRemoving:Connect(function(p)
     RemoveTracer(p)
 end)
 
-LocalPlayer:GetPropertyChangedSignal("Team"):Connect(function()
-    task.wait(0.2)
-    UpdateAll()
-    for p, l in pairs(Tracers) do
-        l.Color = IsTeammate(p) and ESPColor_Team or ESPColor_Enemy
+-- Периодическое обновление цвета (на случай смены команды без респавна)
+task.spawn(function()
+    while MainFrame.Parent do
+        task.wait(1)
+        if ESPEnabled then
+            for p, data in pairs(ActiveESP) do
+                if p.Character then
+                    local newColor = GetESPColor(p)
+                    for _, box in ipairs(data.boxes) do
+                        if box.Parent then
+                            box.Color3 = newColor
+                        end
+                    end
+                end
+            end
+        end
+        if TracersEnabled then
+            for p, l in pairs(Tracers) do
+                l.Color = GetESPColor(p)
+            end
+        end
     end
 end)
 
@@ -660,39 +801,46 @@ end)
 -- ============ ТУМБЛЕРЫ ============
 local twInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 
-local function SetToggle(Btn, Stroke, on)
+local function SetToggle(Btn, Stroke, Dot, IconLabel, IconBg, IconStroke, on)
     Btn:SetAttribute("On", on)
+
     TweenService:Create(Btn, twInfo, {
         BackgroundColor3 = on and NEON or Color3.fromRGB(15, 15, 15)
-    }):Play()
-    TweenService:Create(Btn, twInfo, {
-        TextColor3 = on and Color3.fromRGB(0, 30, 10) or Color3.fromRGB(255, 255, 255)
     }):Play()
     TweenService:Create(Stroke, twInfo, {
         Color = on and NEON or Color3.fromRGB(60, 60, 60),
         Transparency = on and 0 or 0.3
+    }):Play()
+    TweenService:Create(Dot, twInfo, {
+        BackgroundColor3 = on and Color3.fromRGB(0, 40, 15) or Color3.fromRGB(80, 80, 80)
+    }):Play()
+    TweenService:Create(IconLabel, twInfo, {
+        TextColor3 = on and Color3.fromRGB(0, 30, 10) or Color3.fromRGB(200, 200, 200)
+    }):Play()
+    TweenService:Create(IconBg, twInfo, {
+        BackgroundColor3 = on and Color3.fromRGB(0, 60, 25) or Color3.fromRGB(30, 30, 35)
+    }):Play()
+    TweenService:Create(IconStroke, twInfo, {
+        Color = on and Color3.fromRGB(0, 100, 40) or Color3.fromRGB(60, 60, 60)
     }):Play()
 end
 
 ESPBtn.MouseButton1Click:Connect(function()
     UI.PlayClick()
     ESPEnabled = not ESPEnabled
-    SetToggle(ESPBtn, ESPStroke, ESPEnabled)
+    SetToggle(ESPBtn, ESPStroke, ESPDot, ESPIcon, ESPIconBg, ESPIconStroke, ESPEnabled)
     UpdateAll()
 end)
 
 TracersBtn.MouseButton1Click:Connect(function()
     UI.PlayClick()
     TracersEnabled = not TracersEnabled
-    SetToggle(TracersBtn, TracersStroke, TracersEnabled)
+    SetToggle(TracersBtn, TracersStroke, TracersDot, TracersIcon, TracersIconBg, TracersIconStroke, TracersEnabled)
     if not TracersEnabled then
         for _, l in pairs(Tracers) do l.Visible = false end
     end
     UpdateAll()
 end)
-
-SetToggle(ESPBtn, ESPStroke, false)
-SetToggle(TracersBtn, TracersStroke, false)
 
 print("Part 3/3 loaded. ESP + Tracers ready.")
 print("Telegram: https://t.me/devscripts0")
