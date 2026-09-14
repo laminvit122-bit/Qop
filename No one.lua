@@ -193,10 +193,6 @@ local NEON = UI.NEON
 local TEXT_DIM = Color3.fromRGB(160, 160, 170)
 local TEXT_BRIGHT = Color3.fromRGB(240, 240, 245)
 
--- Убираем градиент окна, чтобы не было чёрного пятна при перетаскивании
-local bgGrad = MainFrame:FindFirstChildOfClass("UIGradient")
-if bgGrad then bgGrad:Destroy() end
-
 local SideBar = Instance.new("Frame")
 SideBar.Size = UDim2.new(0, 170, 1, -56)
 SideBar.Position = UDim2.new(0, 0, 0, 56)
@@ -219,42 +215,112 @@ local ContentFrame = Instance.new("Frame")
 ContentFrame.Size = UDim2.new(1, -170, 1, -56)
 ContentFrame.Position = UDim2.new(0, 170, 0, 56)
 ContentFrame.BackgroundTransparency = 1
+ContentFrame.ClipsDescendants = true
 ContentFrame.ZIndex = 2
 ContentFrame.Parent = MainFrame
 
-local ContentHeader = Instance.new("TextLabel")
-ContentHeader.Size = UDim2.new(0, 300, 0, 20)
-ContentHeader.Position = UDim2.new(0, 20, 0, 15)
-ContentHeader.BackgroundTransparency = 1
-ContentHeader.Text = "Main"
-ContentHeader.TextColor3 = TEXT_BRIGHT
-ContentHeader.TextSize = 18
-ContentHeader.Font = Enum.Font.GothamBold
-ContentHeader.TextXAlignment = Enum.TextXAlignment.Left
-ContentHeader.ZIndex = 3
-ContentHeader.Parent = ContentFrame
+-- ============ 3 СТРАНИЦЫ ============
+local Pages = {}
 
-local ContentSub = Instance.new("TextLabel")
-ContentSub.Size = UDim2.new(0, 350, 0, 16)
-ContentSub.Position = UDim2.new(0, 20, 0, 36)
-ContentSub.BackgroundTransparency = 1
-ContentSub.Text = "Aim, weapons and movement"
-ContentSub.TextColor3 = TEXT_DIM
-ContentSub.TextSize = 12
-ContentSub.Font = Enum.Font.Gotham
-ContentSub.TextXAlignment = Enum.TextXAlignment.Left
-ContentSub.ZIndex = 3
-ContentSub.Parent = ContentFrame
+local function MakePage(name)
+    local page = Instance.new("Frame")
+    page.Name = name .. "Page"
+    page.Size = UDim2.new(1, 0, 1, 0)
+    page.Position = UDim2.new(0, 0, 0, 0)
+    page.BackgroundTransparency = 1
+    page.Visible = false
+    page.ZIndex = 3
+    page.Parent = ContentFrame
+    Pages[name] = page
+    return page
+end
 
-local GridLine = Instance.new("Frame")
-GridLine.Size = UDim2.new(1, -40, 0, 1)
-GridLine.Position = UDim2.new(0, 20, 0, 65)
-GridLine.BackgroundColor3 = Color3.fromRGB(30, 40, 32)
-GridLine.BorderSizePixel = 0
-GridLine.ZIndex = 3
-GridLine.Parent = ContentFrame
+local MainPage = MakePage("Main")
+local VisualPage = MakePage("Visual")
+local SkinPage = MakePage("SkinChanger")
 
-local function CreateTabButton(name, icon, yOffset)
+-- Заголовки для каждой страницы
+local function MakeHeader(page, title, sub)
+    local h = Instance.new("TextLabel")
+    h.Size = UDim2.new(1, -40, 0, 20)
+    h.Position = UDim2.new(0, 20, 0, 15)
+    h.BackgroundTransparency = 1
+    h.Text = title
+    h.TextColor3 = TEXT_BRIGHT
+    h.TextSize = 18
+    h.Font = Enum.Font.GothamBold
+    h.TextXAlignment = Enum.TextXAlignment.Left
+    h.ZIndex = 3
+    h.Parent = page
+
+    local s = Instance.new("TextLabel")
+    s.Size = UDim2.new(1, -40, 0, 16)
+    s.Position = UDim2.new(0, 20, 0, 36)
+    s.BackgroundTransparency = 1
+    s.Text = sub
+    s.TextColor3 = TEXT_DIM
+    s.TextSize = 12
+    s.Font = Enum.Font.Gotham
+    s.TextXAlignment = Enum.TextXAlignment.Left
+    s.ZIndex = 3
+    s.Parent = page
+
+    local line = Instance.new("Frame")
+    line.Size = UDim2.new(1, -40, 0, 1)
+    line.Position = UDim2.new(0, 20, 0, 65)
+    line.BackgroundColor3 = Color3.fromRGB(30, 40, 32)
+    line.BorderSizePixel = 0
+    line.ZIndex = 3
+    line.Parent = page
+end
+
+MakeHeader(MainPage, "Main", "Aim, weapons and movement")
+MakeHeader(VisualPage, "Visual", "ESP, tracers and outlines")
+MakeHeader(SkinPage, "Skin Changer", "Skins, knives and cosmetics")
+
+-- ============ ФУНКЦИЯ СОЗДАНИЯ КНОПКИ-ТУМБЛЕРА ============
+local function MakeToggle(parent, text, pos)
+    local Btn = Instance.new("TextButton")
+    Btn.Size = UDim2.new(0, 110, 0, 110)
+    Btn.Position = pos
+    Btn.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    Btn.BorderSizePixel = 0
+    Btn.Text = text
+    Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Btn.TextSize = 15
+    Btn.Font = Enum.Font.GothamBold
+    Btn.AutoButtonColor = false
+    Btn.ZIndex = 5
+    Btn.Parent = parent
+
+    local C = Instance.new("UICorner")
+    C.CornerRadius = UDim.new(0, 10)
+    C.Parent = Btn
+
+    local S = Instance.new("UIStroke")
+    S.Color = Color3.fromRGB(60, 60, 60)
+    S.Thickness = 1
+    S.Transparency = 0.3
+    S.Parent = Btn
+
+    Btn.MouseEnter:Connect(function()
+        TweenService:Create(S, TweenInfo.new(0.3), {Color = NEON, Transparency = 0}):Play()
+    end)
+    Btn.MouseLeave:Connect(function()
+        if not Btn:GetAttribute("On") then
+            TweenService:Create(S, TweenInfo.new(0.3), {Color = Color3.fromRGB(60, 60, 60), Transparency = 0.3}):Play()
+        end
+    end)
+
+    return Btn, S
+end
+
+-- Кнопки в VisualPage
+local ESPBtn, ESPStroke = MakeToggle(VisualPage, "ESP", UDim2.new(0, 20, 0, 90))
+local TracersBtn, TracersStroke = MakeToggle(VisualPage, "TRACERS", UDim2.new(0, 150, 0, 90))
+
+-- ============ ВКЛАДКИ SIDEBAR ============
+local function CreateTabButton(name, icon, yOffset, pageName)
     local Btn = Instance.new("TextButton")
     Btn.Name = name .. "Tab"
     Btn.Size = UDim2.new(1, -20, 0, 44)
@@ -346,9 +412,9 @@ local function CreateTabButton(name, icon, yOffset)
 end
 
 local Tabs = {
-    {Name = "Main", Icon = "🔧", Offset = 15},
-    {Name = "Visual", Icon = "👁", Offset = 65},
-    {Name = "Skin Changer", Icon = "🎨", Offset = 115}
+    {Name = "Main", Icon = "🔧", Offset = 15, Page = "Main"},
+    {Name = "Visual", Icon = "👁", Offset = 65, Page = "Visual"},
+    {Name = "Skin Changer", Icon = "🎨", Offset = 115, Page = "SkinChanger"}
 }
 
 local TabButtons = {}
@@ -376,81 +442,38 @@ local function ActivateTab(tabName)
             Color = act and NEON or Color3.fromRGB(40, 50, 42),
             Transparency = act and 0 or 0.3
         }):Play()
+
+        -- Показываем только активную страницу
+        if data.Page and Pages[data.Page] then
+            Pages[data.Page].Visible = act
+        end
     end
 end
 
-local subs = {
-    Main = "Aim, weapons and movement",
-    Visual = "ESP, tracers and outlines",
-    ["Skin Changer"] = "Skins, knives and cosmetics"
-}
-
 for _, t in ipairs(Tabs) do
-    local b, l, i, il, ibs, ibg = CreateTabButton(t.Name, t.Icon, t.Offset)
-    TabButtons[t.Name] = {Button=b, Label=l, Indicator=i, IconLabel=il, IconBgStroke=ibs, IconBg=ibg}
+    local b, l, i, il, ibs, ibg = CreateTabButton(t.Name, t.Icon, t.Offset, t.Page)
+    TabButtons[t.Name] = {
+        Button=b, Label=l, Indicator=i, IconLabel=il,
+        IconBgStroke=ibs, IconBg=ibg, Page=t.Page
+    }
     b.MouseButton1Click:Connect(function()
         ActivateTab(t.Name)
-        ContentHeader.Text = t.Name
-        ContentSub.Text = subs[t.Name] or ""
-        ContentHeader.TextTransparency = 1
-        ContentSub.TextTransparency = 1
-        TweenService:Create(ContentHeader, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
-        TweenService:Create(ContentSub, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
     end)
 end
 
 ActivateTab("Main")
 
--- Контейнер для кнопок вкладки Visual
-local VisualPage = Instance.new("Frame")
-VisualPage.Name = "VisualPage"
-VisualPage.Size = UDim2.new(1, -40, 1, -100)
-VisualPage.Position = UDim2.new(0, 20, 0, 80)
-VisualPage.BackgroundTransparency = 1
-VisualPage.ZIndex = 3
-VisualPage.Parent = ContentFrame
-
--- Кнопка ESP (маленький чёрный квадрат с белым текстом)
-local ESPBtn = Instance.new("TextButton")
-ESPBtn.Name = "ESPToggle"
-ESPBtn.Size = UDim2.new(0, 110, 0, 110)
-ESPBtn.Position = UDim2.new(0, 0, 0, 0)
-ESPBtn.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-ESPBtn.BorderSizePixel = 0
-ESPBtn.Text = "ESP"
-ESPBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ESPBtn.TextSize = 16
-ESPBtn.Font = Enum.Font.GothamBold
-ESPBtn.AutoButtonColor = false
-ESPBtn.ZIndex = 5
-ESPBtn.Parent = VisualPage
-
-local EBC = Instance.new("UICorner")
-EBC.CornerRadius = UDim.new(0, 10)
-EBC.Parent = ESPBtn
-
-local EBStroke = Instance.new("UIStroke")
-EBStroke.Color = Color3.fromRGB(60, 60, 60)
-EBStroke.Thickness = 1
-EBStroke.Transparency = 0.3
-EBStroke.Parent = ESPBtn
-
-ESPBtn.MouseEnter:Connect(function()
-    TweenService:Create(EBStroke, TweenInfo.new(0.3), {Color = NEON, Transparency = 0}):Play()
-end)
-ESPBtn.MouseLeave:Connect(function()
-    if not ESPBtn:GetAttribute("On") then
-        TweenService:Create(EBStroke, TweenInfo.new(0.3), {Color = Color3.fromRGB(60, 60, 60), Transparency = 0.3}):Play()
-    end
-end)
-
+-- Скрываем частицы внутри окна (убираем баг с прозрачной хренью)
 UI.TabButtons = TabButtons
 UI.ActivateTab = ActivateTab
+UI.Pages = Pages
 UI.ContentFrame = ContentFrame
 UI.RunService = RunService
 UI.TweenService = TweenService
 UI.ESPButton = ESPBtn
-UI.ESPStroke = EBStroke
+UI.ESPStroke = ESPStroke
+UI.TracersButton = TracersBtn
+UI.TracersStroke = TracersStroke
 
 print("Part 2/3 loaded.")
 -- No One | Part 3/3
@@ -467,54 +490,9 @@ local MainFrame = UI.MainFrame
 local Shadow = UI.Shadow
 local NEON = UI.NEON
 local ESPBtn = UI.ESPButton
-local EBStroke = UI.ESPStroke
-
--- ============ ЧАСТИЦЫ ============
-local particles = {}
-local function MakeParticle(x, y, size)
-    local p = Instance.new("Frame")
-    p.Size = UDim2.new(0, size, 0, size)
-    p.Position = UDim2.new(0, x, 0, y)
-    p.BackgroundColor3 = NEON
-    p.BackgroundTransparency = 0.5
-    p.BorderSizePixel = 0
-    p.ZIndex = 0
-    p.Parent = MainFrame
-    local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(1, 0)
-    c.Parent = p
-    table.insert(particles, {
-        frame = p, baseX = x, baseY = y,
-        phase = math.random() * math.pi * 2,
-        phase2 = math.random() * math.pi * 2,
-        speedX = math.random(80, 140) / 100,
-        speedY = math.random(60, 110) / 100,
-        ampX = math.random(8, 22),
-        ampY = math.random(12, 30),
-    })
-end
-
-MakeParticle(60, 120, 4)
-MakeParticle(140, 200, 3)
-MakeParticle(280, 90, 5)
-MakeParticle(400, 180, 3)
-MakeParticle(480, 120, 4)
-MakeParticle(520, 260, 3)
-MakeParticle(200, 300, 4)
-MakeParticle(350, 320, 3)
-
-RunService.RenderStepped:Connect(function()
-    local t = tick()
-    for _, d in ipairs(particles) do
-        if d.frame.Parent then
-            local offX = math.sin(t * d.speedX + d.phase) * d.ampX
-            local offY = math.cos(t * d.speedY + d.phase2) * d.ampY
-            d.frame.Position = UDim2.new(0, d.baseX + offX, 0, d.baseY + offY)
-            local pulse = (math.sin(t * d.speedY * 0.8 + d.phase) + 1) / 2
-            d.frame.BackgroundTransparency = 0.35 + pulse * 0.4
-        end
-    end
-end)
+local ESPStroke = UI.ESPStroke
+local TracersBtn = UI.TracersButton
+local TracersStroke = UI.TracersStroke
 
 -- ============ ФУТЕР ============
 local Footer = Instance.new("TextLabel")
@@ -526,7 +504,7 @@ Footer.TextColor3 = Color3.fromRGB(0, 150, 60)
 Footer.TextSize = 11
 Footer.Font = Enum.Font.GothamMedium
 Footer.TextXAlignment = Enum.TextXAlignment.Right
-Footer.ZIndex = 3
+Footer.ZIndex = 10
 Footer.Parent = MainFrame
 
 -- ============ АНИМАЦИЯ ОКНА ============
@@ -544,12 +522,13 @@ TweenService:Create(Shadow, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.Easin
     Position = UDim2.new(0.5, -300, 0.5, -165)
 }):Play()
 
--- ============ ESP ЛОГИКА ============
-local ESPColor_Team = Color3.fromRGB(0, 120, 255)
-local ESPColor_Enemy = Color3.fromRGB(255, 40, 40)
+-- ============ НАСТРОЙКИ ESP ============
+local ESPColor_Team = Color3.fromRGB(0, 120, 255)   -- синий
+local ESPColor_Enemy = Color3.fromRGB(255, 40, 40)  -- красный
 local ActiveESP = {}
 local Tracers = {}
 local ESPEnabled = false
+local TracersEnabled = false
 
 local function IsTeammate(p)
     if p == LocalPlayer then return true end
@@ -557,6 +536,7 @@ local function IsTeammate(p)
     return p.Team == LocalPlayer.Team
 end
 
+-- ============ ESP ============
 local function CreateESP(player)
     if player == LocalPlayer then return end
     if ActiveESP[player] then return end
@@ -582,6 +562,7 @@ local function RemoveESP(p)
     if ActiveESP[p] then ActiveESP[p]:Destroy() ActiveESP[p] = nil end
 end
 
+-- ============ TRACERS ============
 local function CreateTracer(player)
     if player == LocalPlayer then return end
     if Tracers[player] then return end
@@ -597,34 +578,32 @@ local function RemoveTracer(p)
     if Tracers[p] then Tracers[p]:Remove() Tracers[p] = nil end
 end
 
-local function EnableESPFor(player)
-    if player == LocalPlayer then return end
-    CreateTracer(player)
-    if player.Character then CreateESP(player) end
-end
-
-local function DisableESPFor(player)
-    RemoveESP(player)
-    RemoveTracer(player)
-end
-
-local function RefreshAll()
+-- ============ ОБНОВЛЕНИЕ ============
+local function UpdateAll()
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= LocalPlayer then
-            if ESPEnabled then EnableESPFor(p) else DisableESPFor(p) end
+            if ESPEnabled then
+                if p.Character then CreateESP(p) end
+            else
+                RemoveESP(p)
+            end
+            if TracersEnabled then
+                CreateTracer(p)
+            else
+                RemoveTracer(p)
+            end
         end
     end
 end
 
 local function Setup(p)
     if p == LocalPlayer then return end
-    if ESPEnabled then EnableESPFor(p) end
+    if ESPEnabled and p.Character then CreateESP(p) end
+    if TracersEnabled then CreateTracer(p) end
+
     p.CharacterAdded:Connect(function()
         task.wait(0.4)
-        if ESPEnabled then
-            RemoveESP(p)
-            CreateESP(p)
-        end
+        if ESPEnabled then RemoveESP(p) CreateESP(p) end
     end)
     p.CharacterRemoving:Connect(function() RemoveESP(p) end)
     p:GetPropertyChangedSignal("Team"):Connect(function()
@@ -632,29 +611,30 @@ local function Setup(p)
         if ESPEnabled then
             RemoveESP(p)
             if p.Character then CreateESP(p) end
-            if Tracers[p] then
-                Tracers[p].Color = IsTeammate(p) and ESPColor_Team or ESPColor_Enemy
-            end
+        end
+        if Tracers[p] then
+            Tracers[p].Color = IsTeammate(p) and ESPColor_Team or ESPColor_Enemy
         end
     end)
 end
 
 for _, p in ipairs(Players:GetPlayers()) do Setup(p) end
 Players.PlayerAdded:Connect(Setup)
-Players.PlayerRemoving:Connect(function(p) DisableESPFor(p) end)
+Players.PlayerRemoving:Connect(function(p)
+    RemoveESP(p)
+    RemoveTracer(p)
+end)
 
 LocalPlayer:GetPropertyChangedSignal("Team"):Connect(function()
     task.wait(0.2)
-    if ESPEnabled then
-        RefreshAll()
-        for p, l in pairs(Tracers) do
-            l.Color = IsTeammate(p) and ESPColor_Team or ESPColor_Enemy
-        end
+    UpdateAll()
+    for p, l in pairs(Tracers) do
+        l.Color = IsTeammate(p) and ESPColor_Team or ESPColor_Enemy
     end
 end)
 
 RunService.RenderStepped:Connect(function()
-    if not ESPEnabled then return end
+    if not TracersEnabled then return end
     local bottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= LocalPlayer then
@@ -677,33 +657,42 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- ============ ТУМБЛЕР ESP ============
-local function SetESPToggle(on)
-    ESPEnabled = on
-    ESPBtn:SetAttribute("On", on)
+-- ============ ТУМБЛЕРЫ ============
+local twInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 
-    local twInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
-
-    TweenService:Create(ESPBtn, twInfo, {
+local function SetToggle(Btn, Stroke, on)
+    Btn:SetAttribute("On", on)
+    TweenService:Create(Btn, twInfo, {
         BackgroundColor3 = on and NEON or Color3.fromRGB(15, 15, 15)
     }):Play()
-    TweenService:Create(ESPBtn, twInfo, {
+    TweenService:Create(Btn, twInfo, {
         TextColor3 = on and Color3.fromRGB(0, 30, 10) or Color3.fromRGB(255, 255, 255)
     }):Play()
-    TweenService:Create(EBStroke, twInfo, {
+    TweenService:Create(Stroke, twInfo, {
         Color = on and NEON or Color3.fromRGB(60, 60, 60),
         Transparency = on and 0 or 0.3
     }):Play()
-
-    RefreshAll()
 end
 
 ESPBtn.MouseButton1Click:Connect(function()
     UI.PlayClick()
-    SetESPToggle(not ESPEnabled)
+    ESPEnabled = not ESPEnabled
+    SetToggle(ESPBtn, ESPStroke, ESPEnabled)
+    UpdateAll()
 end)
 
-SetESPToggle(false)
+TracersBtn.MouseButton1Click:Connect(function()
+    UI.PlayClick()
+    TracersEnabled = not TracersEnabled
+    SetToggle(TracersBtn, TracersStroke, TracersEnabled)
+    if not TracersEnabled then
+        for _, l in pairs(Tracers) do l.Visible = false end
+    end
+    UpdateAll()
+end)
 
-print("Part 3/3 loaded. Toggle ESP ready.")
+SetToggle(ESPBtn, ESPStroke, false)
+SetToggle(TracersBtn, TracersStroke, false)
+
+print("Part 3/3 loaded. ESP + Tracers ready.")
 print("Telegram: https://t.me/devscripts0")
