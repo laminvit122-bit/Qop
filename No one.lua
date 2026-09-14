@@ -1,4 +1,4 @@
--- No One | Part 1/3
+-- No One | Part 1/2
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
@@ -7,6 +7,8 @@ if CoreGui:FindFirstChild("NoOneUI") then CoreGui.NoOneUI:Destroy() end
 
 local NEON = Color3.fromRGB(0, 255, 100)
 local BG_DARK = Color3.fromRGB(8, 8, 10)
+local TEXT_DIM = Color3.fromRGB(160, 160, 170)
+local TEXT_BRIGHT = Color3.fromRGB(240, 240, 245)
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "NoOneUI"
@@ -25,6 +27,7 @@ local function PlayClick()
     ClickSound:Play()
 end
 
+-- ГЛАВНОЕ ОКНО
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 600, 0, 350)
@@ -69,6 +72,7 @@ task.spawn(function()
     end
 end)
 
+-- ТОПБАР
 local TopBar = Instance.new("Frame")
 TopBar.Size = UDim2.new(1, 0, 0, 60)
 TopBar.BackgroundColor3 = Color3.fromRGB(5, 5, 7)
@@ -105,6 +109,7 @@ SepGrad.Transparency = NumberSequence.new({
 })
 SepGrad.Parent = Sep
 
+-- ЗАГОЛОВОК
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(0, 300, 0, 32)
 Title.Position = UDim2.new(0, 25, 0, 8)
@@ -189,25 +194,7 @@ task.spawn(function()
     end
 end)
 
-_G.NoOneUI = {
-    ScreenGui = ScreenGui,
-    MainFrame = MainFrame,
-    NEON = NEON,
-    PlayClick = PlayClick,
-}
-print("Part 1/3 loaded.")
--- No One | Part 2/3
-local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
-
-if not _G.NoOneUI then warn("Сначала Part 1!") return end
-
-local UI = _G.NoOneUI
-local MainFrame = UI.MainFrame
-local NEON = UI.NEON
-local TEXT_DIM = Color3.fromRGB(160, 160, 170)
-local TEXT_BRIGHT = Color3.fromRGB(240, 240, 245)
-
+-- SIDEBAR
 local SideBar = Instance.new("Frame")
 SideBar.Size = UDim2.new(0, 170, 1, -61)
 SideBar.Position = UDim2.new(0, 0, 0, 61)
@@ -226,6 +213,7 @@ SideLine.BorderSizePixel = 0
 SideLine.ZIndex = 3
 SideLine.Parent = SideBar
 
+-- CONTENT
 local ContentFrame = Instance.new("Frame")
 ContentFrame.Size = UDim2.new(1, -170, 1, -61)
 ContentFrame.Position = UDim2.new(0, 170, 0, 61)
@@ -314,6 +302,7 @@ MakeHeader(MainPage, "Main", "Aim, weapons and movement", "⚙")
 MakeHeader(VisualPage, "Visual", "ESP, tracers and outlines", "👁")
 MakeHeader(SkinPage, "Skin Changer", "Skins, knives and cosmetics", "🎨")
 
+-- ФУНКЦИЯ ДЛИННОГО ТУМБЛЕРА
 local function MakeLongToggle(parent, text, yPos, iconText)
     local Btn = Instance.new("TextButton")
     Btn.Size = UDim2.new(1, -40, 0, 50)
@@ -399,6 +388,7 @@ end
 local ESPBtn, ESPStroke, ESPDot, ESPIcon, ESPIconBg, ESPIconStroke = MakeLongToggle(VisualPage, "ESP", 85, "🎯")
 local TracersBtn, TracersStroke, TracersDot, TracersIcon, TracersIconBg, TracersIconStroke = MakeLongToggle(VisualPage, "TRACERS", 145, "📡")
 
+-- ВКЛАДКИ
 local function CreateTabButton(name, icon, yOffset)
     local Btn = Instance.new("TextButton")
     Btn.Name = name .. "Tab"
@@ -484,7 +474,7 @@ local function CreateTabButton(name, icon, yOffset)
     end)
 
     Btn.MouseButton1Click:Connect(function()
-        UI.PlayClick()
+        PlayClick()
     end)
 
     return Btn, TL, Ind, IL, IBS, IconBg
@@ -541,51 +531,6 @@ end
 
 ActivateTab("Main")
 
-UI.TabButtons = TabButtons
-UI.ActivateTab = ActivateTab
-UI.Pages = Pages
-UI.ContentFrame = ContentFrame
-UI.TweenService = TweenService
-UI.ESPButton = ESPBtn
-UI.ESPStroke = ESPStroke
-UI.ESPDot = ESPDot
-UI.ESPIcon = ESPIcon
-UI.ESPIconBg = ESPIconBg
-UI.ESPIconStroke = ESPIconStroke
-UI.TracersButton = TracersBtn
-UI.TracersStroke = TracersStroke
-UI.TracersDot = TracersDot
-UI.TracersIcon = TracersIcon
-UI.TracersIconBg = TracersIconBg
-UI.TracersIconStroke = TracersIconStroke
-
-print("Part 2/3 loaded.")
--- No One | Part 3/3
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-
-if not _G.NoOneUI then warn("Сначала Part 1 и 2!") return end
-
-local UI = _G.NoOneUI
-local MainFrame = UI.MainFrame
-local NEON = UI.NEON
-local ESPBtn = UI.ESPButton
-local ESPStroke = UI.ESPStroke
-local ESPDot = UI.ESPDot
-local ESPIcon = UI.ESPIcon
-local ESPIconBg = UI.ESPIconBg
-local ESPIconStroke = UI.ESPIconStroke
-
-local TracersBtn = UI.TracersButton
-local TracersStroke = UI.TracersStroke
-local TracersDot = UI.TracersDot
-local TracersIcon = UI.TracersIcon
-local TracersIconBg = UI.TracersIconBg
-local TracersIconStroke = UI.TracersIconStroke
-
 -- ФУТЕР
 local Footer = Instance.new("TextLabel")
 Footer.Size = UDim2.new(1, -20, 0, 20)
@@ -608,36 +553,74 @@ TweenService:Create(MainFrame, TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.E
     Position = UDim2.new(0.5, -300, 0.5, -175)
 }):Play()
 
--- ============ ЦВЕТА ============
-local TEAM_FOLDER = "Counter-Terrorists"
-local ENEMY_FOLDER = "Terrorists"
+-- СОХРАНЯЕМ ССЫЛКИ ДЛЯ ЧАСТИ 2
+_G.NoOneUI_Refs = {
+    ESPBtn = ESPBtn,
+    ESPStroke = ESPStroke,
+    ESPDot = ESPDot,
+    ESPIcon = ESPIcon,
+    ESPIconBg = ESPIconBg,
+    ESPIconStroke = ESPIconStroke,
+    TracersBtn = TracersBtn,
+    TracersStroke = TracersStroke,
+    TracersDot = TracersDot,
+    TracersIcon = TracersIcon,
+    TracersIconBg = TracersIconBg,
+    TracersIconStroke = TracersIconStroke,
+    PlayClick = PlayClick,
+    NEON = NEON,
+    MainFrame = MainFrame,
+}
 
-local ESPColor_Team = Color3.fromRGB(0, 120, 255)   -- синий
-local ESPColor_Enemy = Color3.fromRGB(255, 40, 40)  -- красный
+print("Part 1/2 loaded.")
+-- No One | Part 2/2
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+local Refs = _G.NoOneUI_Refs
+if not Refs then warn("Сначала запусти Part 1!") return end
+
+local ESPBtn = Refs.ESPBtn
+local ESPStroke = Refs.ESPStroke
+local ESPDot = Refs.ESPDot
+local ESPIcon = Refs.ESPIcon
+local ESPIconBg = Refs.ESPIconBg
+local ESPIconStroke = Refs.ESPIconStroke
+
+local TracersBtn = Refs.TracersBtn
+local TracersStroke = Refs.TracersStroke
+local TracersDot = Refs.TracersDot
+local TracersIcon = Refs.TracersIcon
+local TracersIconBg = Refs.TracersIconBg
+local TracersIconStroke = Refs.TracersIconStroke
+
+local PlayClick = Refs.PlayClick
+local NEON = Refs.NEON
+
+-- ЦВЕТА ESP
+local ESPColor_Team = Color3.fromRGB(0, 120, 255)
+local ESPColor_Enemy = Color3.fromRGB(255, 40, 40)
 
 local ActiveESP = {}
 local Tracers = {}
 local ESPEnabled = false
 local TracersEnabled = false
 
--- ============ ОПРЕДЕЛЕНИЕ КОМАНДЫ ПО ПАПКЕ ============
--- В BloxStrike команды разделены по папкам в Workspace.Characters
+-- ОПРЕДЕЛЕНИЕ КОМАНДЫ ПО ПАПКЕ
 local function GetTeamFolder(player)
     local char = player.Character
-    if not char then return nil end
-    local parent = char.Parent
-    if not parent then return nil end
-    return parent.Name
+    if not char or not char.Parent then return nil end
+    return char.Parent.Name
 end
 
 local function IsTeammate(player)
     if player == LocalPlayer then return true end
-
     local myFolder = GetTeamFolder(LocalPlayer)
     local hisFolder = GetTeamFolder(player)
     if not myFolder or not hisFolder then return false end
-
-    -- Оба в одной папке — тиммейты
     return myFolder == hisFolder
 end
 
@@ -649,7 +632,7 @@ local function GetESPColor(player)
     end
 end
 
--- ============ ESP через SelectionBox ============
+-- ESP через SelectionBox
 local function CreateESP(player)
     if player == LocalPlayer then return end
     if ActiveESP[player] then return end
@@ -685,7 +668,7 @@ local function RemoveESP(p)
     end
 end
 
--- ============ TRACERS ============
+-- TRACERS
 local function CreateTracer(player)
     if player == LocalPlayer then return end
     if Tracers[player] then return end
@@ -701,7 +684,7 @@ local function RemoveTracer(p)
     if Tracers[p] then Tracers[p]:Remove() Tracers[p] = nil end
 end
 
--- ============ ОБНОВЛЕНИЕ ============
+-- ОБНОВЛЕНИЕ
 local function UpdateAll()
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= LocalPlayer then
@@ -730,7 +713,6 @@ local function Setup(p)
     end)
     p.CharacterRemoving:Connect(function() RemoveESP(p) end)
 
-    -- Следим за сменой команды через перерождение
     p:GetPropertyChangedSignal("Team"):Connect(function()
         task.wait(0.1)
         if ESPEnabled then
@@ -750,9 +732,9 @@ Players.PlayerRemoving:Connect(function(p)
     RemoveTracer(p)
 end)
 
--- Периодическое обновление цвета (на случай смены команды без респавна)
+-- Периодическое обновление цвета
 task.spawn(function()
-    while MainFrame.Parent do
+    while Refs.MainFrame.Parent do
         task.wait(1)
         if ESPEnabled then
             for p, data in pairs(ActiveESP) do
@@ -774,6 +756,7 @@ task.spawn(function()
     end
 end)
 
+-- РЕНДЕР TRACERS
 RunService.RenderStepped:Connect(function()
     if not TracersEnabled then return end
     local bottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
@@ -798,12 +781,11 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- ============ ТУМБЛЕРЫ ============
+-- ТУМБЛЕРЫ
 local twInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 
 local function SetToggle(Btn, Stroke, Dot, IconLabel, IconBg, IconStroke, on)
     Btn:SetAttribute("On", on)
-
     TweenService:Create(Btn, twInfo, {
         BackgroundColor3 = on and NEON or Color3.fromRGB(15, 15, 15)
     }):Play()
@@ -826,14 +808,14 @@ local function SetToggle(Btn, Stroke, Dot, IconLabel, IconBg, IconStroke, on)
 end
 
 ESPBtn.MouseButton1Click:Connect(function()
-    UI.PlayClick()
+    PlayClick()
     ESPEnabled = not ESPEnabled
     SetToggle(ESPBtn, ESPStroke, ESPDot, ESPIcon, ESPIconBg, ESPIconStroke, ESPEnabled)
     UpdateAll()
 end)
 
 TracersBtn.MouseButton1Click:Connect(function()
-    UI.PlayClick()
+    PlayClick()
     TracersEnabled = not TracersEnabled
     SetToggle(TracersBtn, TracersStroke, TracersDot, TracersIcon, TracersIconBg, TracersIconStroke, TracersEnabled)
     if not TracersEnabled then
@@ -842,5 +824,5 @@ TracersBtn.MouseButton1Click:Connect(function()
     UpdateAll()
 end)
 
-print("Part 3/3 loaded. ESP + Tracers ready.")
+print("Part 2/2 loaded. ESP + Tracers ready.")
 print("Telegram: https://t.me/devscripts0")
