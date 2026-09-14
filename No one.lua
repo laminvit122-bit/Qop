@@ -1,19 +1,19 @@
--- No One | Ultimate Neon UI + Click Sound
--- Design inspired by screenshot
+-- No One | Part 1/2
+-- Base UI, Topbar, Sidebar, Tabs, Sound
 -- Telegram: https://t.me/devscripts0
--- Click Sound ID: 127105730240202
 
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local SoundService = game:GetService("SoundService")
+local Debris = game:GetService("Debris")
 
 if CoreGui:FindFirstChild("NoOneUI") then
     CoreGui.NoOneUI:Destroy()
 end
 
--- ============ НАСТРОЙКИ ЦВЕТА ============
+-- ============ ЦВЕТА ============
 local NEON = Color3.fromRGB(0, 255, 100)
 local NEON_DARK = Color3.fromRGB(0, 150, 60)
 local BG_DARK = Color3.fromRGB(8, 8, 10)
@@ -30,21 +30,18 @@ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.IgnoreGuiInset = true
 ScreenGui.Parent = CoreGui
 
--- ============ ЗВУК КЛИКА ============
-local ClickSound = Instance.new("Sound")
-ClickSound.SoundId = "rbxassetid://127105730240202"
-ClickSound.Volume = 0.5
-ClickSound.PlaybackSpeed = 1
-ClickSound.Parent = SoundService
-
+-- ============ ЗВУК КЛИКА (БЕЗ ПЕРЕЗАРЯДКИ) ============
 local function PlayClick()
-    local s = ClickSound:Clone()
+    local s = Instance.new("Sound")
+    s.SoundId = "rbxassetid://127105730240202"
+    s.Volume = 0.5
+    s.PlaybackSpeed = 1
     s.Parent = SoundService
     s:Play()
-    game:GetService("Debris"):AddItem(s, 2)
+    Debris:AddItem(s, 1.5)
 end
 
--- ============ ТЕНЬ ПОД ОКНОМ ============
+-- ============ ТЕНЬ ============
 local Shadow = Instance.new("Frame")
 Shadow.Name = "Shadow"
 Shadow.Size = UDim2.new(0, 620, 0, 370)
@@ -76,7 +73,6 @@ local MainCorner = Instance.new("UICorner")
 MainCorner.CornerRadius = UDim.new(0, 14)
 MainCorner.Parent = MainFrame
 
--- Внутренний градиент
 local BgGradient = Instance.new("UIGradient")
 BgGradient.Color = ColorSequence.new({
     ColorSequenceKeypoint.new(0, Color3.fromRGB(12, 25, 14)),
@@ -86,28 +82,24 @@ BgGradient.Color = ColorSequence.new({
 BgGradient.Rotation = 135
 BgGradient.Parent = MainFrame
 
--- Внутренняя обводка (мягкая)
 local InnerStroke = Instance.new("UIStroke")
 InnerStroke.Color = Color3.fromRGB(0, 80, 40)
 InnerStroke.Thickness = 1
 InnerStroke.Transparency = 0.3
 InnerStroke.Parent = MainFrame
 
--- Внешняя неоновая обводка
 local MainStroke = Instance.new("UIStroke")
 MainStroke.Color = NEON
 MainStroke.Thickness = 1.5
 MainStroke.Transparency = 0.15
 MainStroke.Parent = MainFrame
 
--- Мягкое свечение снаружи
 local GlowStroke = Instance.new("UIStroke")
 GlowStroke.Color = NEON
 GlowStroke.Thickness = 6
 GlowStroke.Transparency = 0.9
 GlowStroke.Parent = MainFrame
 
--- ============ АНИМАЦИЯ СВЕЧЕНИЯ РАМКИ ============
 task.spawn(function()
     while MainFrame.Parent do
         TweenService:Create(GlowStroke, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.75}):Play()
@@ -142,7 +134,6 @@ TopGradient.Color = ColorSequence.new({
 TopGradient.Rotation = 0
 TopGradient.Parent = TopBar
 
--- Закрывающий нижний угол топбара
 local TopFix = Instance.new("Frame")
 TopFix.Size = UDim2.new(1, 0, 0, 14)
 TopFix.Position = UDim2.new(0, 0, 1, -14)
@@ -152,7 +143,6 @@ TopFix.BorderSizePixel = 0
 TopFix.ZIndex = 2
 TopFix.Parent = TopBar
 
--- Неоновая линия-разделитель под топбаром
 local Separator = Instance.new("Frame")
 Separator.Size = UDim2.new(1, -20, 0, 1)
 Separator.Position = UDim2.new(0, 10, 0, 55)
@@ -169,14 +159,14 @@ SeparatorGradient.Transparency = NumberSequence.new({
 })
 SeparatorGradient.Parent = Separator
 
--- ============ ЗАГОЛОВОК ============
+-- ============ ЗАГОЛОВОК "NO ONE" ============
 local Title = Instance.new("TextLabel")
 Title.Name = "Title"
 Title.Size = UDim2.new(0, 300, 1, 0)
 Title.Position = UDim2.new(0, 25, 0, 0)
 Title.BackgroundTransparency = 1
 Title.Text = "No One"
-Title.TextColor3 = NEON
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 26
 Title.Font = Enum.Font.GothamBlack
 Title.TextXAlignment = Enum.TextXAlignment.Left
@@ -185,19 +175,43 @@ Title.Parent = TopBar
 
 local TitleGradient = Instance.new("UIGradient")
 TitleGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 120)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 170, 70))
+    ColorSequenceKeypoint.new(0.00, Color3.fromRGB(120, 255, 160)),
+    ColorSequenceKeypoint.new(0.25, Color3.fromRGB(0, 255, 100)),
+    ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 180, 70)),
+    ColorSequenceKeypoint.new(0.75, Color3.fromRGB(0, 255, 100)),
+    ColorSequenceKeypoint.new(1.00, Color3.fromRGB(120, 255, 160))
 })
-TitleGradient.Rotation = 90
+TitleGradient.Rotation = 45
 TitleGradient.Parent = Title
 
-local TitleStroke = Instance.new("UIStroke")
-TitleStroke.Color = NEON
-TitleStroke.Thickness = 1.5
-TitleStroke.Transparency = 0.4
-TitleStroke.Parent = Title
+task.spawn(function()
+    while Title.Parent do
+        TweenService:Create(TitleGradient, TweenInfo.new(3, Enum.EasingStyle.Linear), {Rotation = 405}):Play()
+        task.wait(3)
+    end
+end)
 
--- Подзаголовок
+local TitleInnerStroke = Instance.new("UIStroke")
+TitleInnerStroke.Color = Color3.fromRGB(0, 60, 25)
+TitleInnerStroke.Thickness = 2
+TitleInnerStroke.Transparency = 0.2
+TitleInnerStroke.Parent = Title
+
+local TitleGlow = Instance.new("UIStroke")
+TitleGlow.Color = NEON
+TitleGlow.Thickness = 4
+TitleGlow.Transparency = 0.7
+TitleGlow.Parent = Title
+
+task.spawn(function()
+    while Title.Parent do
+        TweenService:Create(TitleGlow, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.4, Thickness = 5}):Play()
+        task.wait(1.5)
+        TweenService:Create(TitleGlow, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Transparency = 0.8, Thickness = 3}):Play()
+        task.wait(1.5)
+    end
+end)
+
 local Subtitle = Instance.new("TextLabel")
 Subtitle.Size = UDim2.new(0, 300, 0, 14)
 Subtitle.Position = UDim2.new(0, 27, 0, 38)
@@ -210,7 +224,6 @@ Subtitle.TextXAlignment = Enum.TextXAlignment.Left
 Subtitle.ZIndex = 3
 Subtitle.Parent = TopBar
 
--- Точка-индикатор
 local Dot = Instance.new("Frame")
 Dot.Size = UDim2.new(0, 9, 0, 9)
 Dot.Position = UDim2.new(0, 220, 0.5, -4)
@@ -251,7 +264,6 @@ SideGradient.Color = ColorSequence.new({
 SideGradient.Rotation = 90
 SideGradient.Parent = SideBar
 
--- Вертикальная неоновая линия справа от sidebar
 local SideLine = Instance.new("Frame")
 SideLine.Size = UDim2.new(0, 1, 1, -30)
 SideLine.Position = UDim2.new(1, -1, 0, 15)
@@ -270,66 +282,7 @@ SideLineGradient.Transparency = NumberSequence.new({
 SideLineGradient.Rotation = 90
 SideLineGradient.Parent = SideLine
 
--- ============ CONTENT ============
-local ContentFrame = Instance.new("Frame")
-ContentFrame.Name = "ContentFrame"
-ContentFrame.Size = UDim2.new(1, -170, 1, -56)
-ContentFrame.Position = UDim2.new(0, 170, 0, 56)
-ContentFrame.BackgroundTransparency = 1
-ContentFrame.BorderSizePixel = 0
-ContentFrame.ZIndex = 2
-ContentFrame.Parent = MainFrame
-
--- Заголовок контента
-local ContentHeader = Instance.new("TextLabel")
-ContentHeader.Size = UDim2.new(0, 200, 0, 20)
-ContentHeader.Position = UDim2.new(0, 20, 0, 15)
-ContentHeader.BackgroundTransparency = 1
-ContentHeader.Text = "Main"
-ContentHeader.TextColor3 = TEXT_BRIGHT
-ContentHeader.TextSize = 18
-ContentHeader.Font = Enum.Font.GothamBold
-ContentHeader.TextXAlignment = Enum.TextXAlignment.Left
-ContentHeader.ZIndex = 3
-ContentHeader.Parent = ContentFrame
-
-local ContentSub = Instance.new("TextLabel")
-ContentSub.Size = UDim2.new(0, 300, 0, 16)
-ContentSub.Position = UDim2.new(0, 20, 0, 36)
-ContentSub.BackgroundTransparency = 1
-ContentSub.Text = "Aim, weapons and movement"
-ContentSub.TextColor3 = TEXT_DIM
-ContentSub.TextSize = 12
-ContentSub.Font = Enum.Font.Gotham
-ContentSub.TextXAlignment = Enum.TextXAlignment.Left
-ContentSub.ZIndex = 3
-ContentSub.Parent = ContentFrame
-
--- Декоративная неоновая скобка
-local function CreateBracket(posX, posY, w, h)
-    local b = Instance.new("Frame")
-    b.Size = UDim2.new(0, w, 0, h)
-    b.Position = UDim2.new(1, posX, 0, posY)
-    b.BackgroundColor3 = NEON
-    b.BackgroundTransparency = 0.3
-    b.BorderSizePixel = 0
-    b.ZIndex = 3
-    b.Parent = ContentFrame
-    return b
-end
-CreateBracket(-25, 20, 14, 2)
-CreateBracket(-25, 20, 2, 14)
-
--- Тонкая внутренняя сетка / декор
-local GridLine1 = Instance.new("Frame")
-GridLine1.Size = UDim2.new(1, -40, 0, 1)
-GridLine1.Position = UDim2.new(0, 20, 0, 65)
-GridLine1.BackgroundColor3 = Color3.fromRGB(30, 40, 32)
-GridLine1.BorderSizePixel = 0
-GridLine1.ZIndex = 3
-GridLine1.Parent = ContentFrame
-
--- ============ ФУНКЦИЯ СОЗДАНИЯ ВКЛАДКИ ============
+-- ============ ФУНКЦИЯ ВКЛАДКИ ============
 local function CreateTabButton(name, icon, yOffset)
     local Button = Instance.new("TextButton")
     Button.Name = name .. "Tab"
@@ -347,7 +300,6 @@ local function CreateTabButton(name, icon, yOffset)
     Corner.CornerRadius = UDim.new(0, 8)
     Corner.Parent = Button
 
-    -- Левая неоновая полоска-индикатор
     local Indicator = Instance.new("Frame")
     Indicator.Name = "Indicator"
     Indicator.Size = UDim2.new(0, 3, 0, 22)
@@ -362,7 +314,6 @@ local function CreateTabButton(name, icon, yOffset)
     IndCorner.CornerRadius = UDim.new(1, 0)
     IndCorner.Parent = Indicator
 
-    -- Иконка в кружке
     local IconBg = Instance.new("Frame")
     IconBg.Size = UDim2.new(0, 30, 0, 30)
     IconBg.Position = UDim2.new(0, 15, 0.5, -15)
@@ -381,7 +332,6 @@ local function CreateTabButton(name, icon, yOffset)
     IconBgStroke.Transparency = 0.3
     IconBgStroke.Parent = IconBg
 
-    -- Сама иконка
     local IconLabel = Instance.new("TextLabel")
     IconLabel.Size = UDim2.new(1, 0, 1, 0)
     IconLabel.Position = UDim2.new(0, 0, 0, 0)
@@ -393,7 +343,6 @@ local function CreateTabButton(name, icon, yOffset)
     IconLabel.ZIndex = 5
     IconLabel.Parent = IconBg
 
-    -- Название вкладки
     local TextLabel = Instance.new("TextLabel")
     TextLabel.Size = UDim2.new(0, 100, 1, 0)
     TextLabel.Position = UDim2.new(0, 58, 0, 0)
@@ -406,7 +355,6 @@ local function CreateTabButton(name, icon, yOffset)
     TextLabel.ZIndex = 5
     TextLabel.Parent = Button
 
-    -- Hover-эффект
     Button.MouseEnter:Connect(function()
         if Button.BackgroundTransparency == 1 then
             TweenService:Create(Button, TweenInfo.new(0.25), {BackgroundTransparency = 0.85, BackgroundColor3 = Color3.fromRGB(0, 90, 40)}):Play()
@@ -423,7 +371,6 @@ local function CreateTabButton(name, icon, yOffset)
         end
     end)
 
-    -- ЗВУК ПРИ КЛИКЕ
     Button.MouseButton1Click:Connect(function()
         PlayClick()
     end)
@@ -482,15 +429,120 @@ for _, tabData in ipairs(Tabs) do
     }
     btn.MouseButton1Click:Connect(function()
         ActivateTab(tabData.Name)
-        ContentHeader.Text = tabData.Name
-        local subtitles = {
-            Main = "Aim, weapons and movement",
-            ESP = "Visuals and player tracking",
-            Style = "Skins, themes and cosmetics",
-            Grenades = "Throwables and utilities",
-            Viewmodel = "Hands, camera and feel"
-        }
-        ContentSub.Text = subtitles[tabData.Name] or ""
+    end)
+end
+
+-- ============ СОХРАНЯЕМ В _G ДЛЯ ЧАСТИ 2 ============
+_G.NoOneUI = {
+    ScreenGui = ScreenGui,
+    MainFrame = MainFrame,
+    Shadow = Shadow,
+    TopBar = TopBar,
+    SideBar = SideBar,
+    TabButtons = TabButtons,
+    ActivateTab = ActivateTab,
+    PlayClick = PlayClick,
+    NEON = NEON,
+    TEXT_DIM = TEXT_DIM,
+    TEXT_BRIGHT = TEXT_BRIGHT,
+    TweenService = TweenService,
+    RunService = RunService,
+}
+
+print("No One UI — Part 1/2 loaded.")
+-- No One | Part 2/2
+-- Content, Ultra Smooth Particles, Footer, Intro Animation
+-- Telegram: https://t.me/devscripts0
+
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+
+-- ============ ПОЛУЧАЕМ ДАННЫЕ ИЗ ЧАСТИ 1 ============
+if not _G.NoOneUI then
+    warn("Сначала запусти Part 1!")
+    return
+end
+
+local UI = _G.NoOneUI
+local MainFrame = UI.MainFrame
+local Shadow = UI.Shadow
+local TabButtons = UI.TabButtons
+local ActivateTab = UI.ActivateTab
+local NEON = UI.NEON
+local TEXT_DIM = UI.TEXT_DIM
+local TEXT_BRIGHT = UI.TEXT_BRIGHT
+
+-- ============ CONTENT FRAME ============
+local ContentFrame = Instance.new("Frame")
+ContentFrame.Name = "ContentFrame"
+ContentFrame.Size = UDim2.new(1, -170, 1, -56)
+ContentFrame.Position = UDim2.new(0, 170, 0, 56)
+ContentFrame.BackgroundTransparency = 1
+ContentFrame.BorderSizePixel = 0
+ContentFrame.ZIndex = 2
+ContentFrame.Parent = MainFrame
+
+local ContentHeader = Instance.new("TextLabel")
+ContentHeader.Size = UDim2.new(0, 200, 0, 20)
+ContentHeader.Position = UDim2.new(0, 20, 0, 15)
+ContentHeader.BackgroundTransparency = 1
+ContentHeader.Text = "Main"
+ContentHeader.TextColor3 = TEXT_BRIGHT
+ContentHeader.TextSize = 18
+ContentHeader.Font = Enum.Font.GothamBold
+ContentHeader.TextXAlignment = Enum.TextXAlignment.Left
+ContentHeader.ZIndex = 3
+ContentHeader.Parent = ContentFrame
+
+local ContentSub = Instance.new("TextLabel")
+ContentSub.Size = UDim2.new(0, 300, 0, 16)
+ContentSub.Position = UDim2.new(0, 20, 0, 36)
+ContentSub.BackgroundTransparency = 1
+ContentSub.Text = "Aim, weapons and movement"
+ContentSub.TextColor3 = TEXT_DIM
+ContentSub.TextSize = 12
+ContentSub.Font = Enum.Font.Gotham
+ContentSub.TextXAlignment = Enum.TextXAlignment.Left
+ContentSub.ZIndex = 3
+ContentSub.Parent = ContentFrame
+
+-- Декоративные скобки
+local function CreateBracket(posX, posY, w, h)
+    local b = Instance.new("Frame")
+    b.Size = UDim2.new(0, w, 0, h)
+    b.Position = UDim2.new(1, posX, 0, posY)
+    b.BackgroundColor3 = NEON
+    b.BackgroundTransparency = 0.3
+    b.BorderSizePixel = 0
+    b.ZIndex = 3
+    b.Parent = ContentFrame
+    return b
+end
+CreateBracket(-25, 20, 14, 2)
+CreateBracket(-25, 20, 2, 14)
+
+local GridLine1 = Instance.new("Frame")
+GridLine1.Size = UDim2.new(1, -40, 0, 1)
+GridLine1.Position = UDim2.new(0, 20, 0, 65)
+GridLine1.BackgroundColor3 = Color3.fromRGB(30, 40, 32)
+GridLine1.BorderSizePixel = 0
+GridLine1.ZIndex = 3
+GridLine1.Parent = ContentFrame
+
+-- ============ ПРИВЯЗКА ЗАГОЛОВКОВ К ВКЛАДКАМ ============
+local subtitles = {
+    Main = "Aim, weapons and movement",
+    ESP = "Visuals and player tracking",
+    Style = "Skins, themes and cosmetics",
+    Grenades = "Throwables and utilities",
+    Viewmodel = "Hands, camera and feel"
+}
+
+for tabName, data in pairs(TabButtons) do
+    data.Button.MouseButton1Click:Connect(function()
+        ContentHeader.Text = tabName
+        ContentSub.Text = subtitles[tabName] or ""
         ContentHeader.TextTransparency = 1
         ContentSub.TextTransparency = 1
         TweenService:Create(ContentHeader, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
@@ -500,13 +552,15 @@ end
 
 ActivateTab("Main")
 
--- ============ ДЕКОРАТИВНЫЕ ЧАСТИЦЫ ============
-local function CreateParticle(x, y, size)
+-- ============ УЛЬТРА-ПЛАВНЫЕ ЧАСТИЦЫ ============
+local particleData = {}
+
+local function CreateUltraSmoothParticle(x, y, size)
     local p = Instance.new("Frame")
     p.Size = UDim2.new(0, size, 0, size)
     p.Position = UDim2.new(0, x, 0, y)
     p.BackgroundColor3 = NEON
-    p.BackgroundTransparency = 0.6
+    p.BackgroundTransparency = 0.5
     p.BorderSizePixel = 0
     p.ZIndex = 0
     p.Parent = MainFrame
@@ -515,32 +569,47 @@ local function CreateParticle(x, y, size)
     c.CornerRadius = UDim.new(1, 0)
     c.Parent = p
 
-    task.spawn(function()
-        while p.Parent do
-            local targetY = p.Position.Y.Offset - math.random(8, 20)
-            local targetX = p.Position.X.Offset + math.random(-8, 8)
-            TweenService:Create(p, TweenInfo.new(math.random(3, 5), Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-                Position = UDim2.new(0, targetX, 0, targetY),
-                BackgroundTransparency = 0.9
-            }):Play()
-            task.wait(math.random(3, 5))
-            TweenService:Create(p, TweenInfo.new(math.random(3, 5), Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-                Position = UDim2.new(0, x, 0, y),
-                BackgroundTransparency = 0.6
-            }):Play()
-            task.wait(math.random(3, 5))
-        end
-    end)
+    local glow = Instance.new("UIStroke")
+    glow.Color = NEON
+    glow.Thickness = 3
+    glow.Transparency = 0.85
+    glow.Parent = p
+
+    table.insert(particleData, {
+        frame = p,
+        baseX = x,
+        baseY = y,
+        phase = math.random() * math.pi * 2,
+        phase2 = math.random() * math.pi * 2,
+        speedX = math.random(80, 140) / 100,
+        speedY = math.random(60, 110) / 100,
+        ampX = math.random(8, 22),
+        ampY = math.random(12, 30),
+    })
 end
 
-CreateParticle(60, 120, 4)
-CreateParticle(140, 200, 3)
-CreateParticle(280, 90, 5)
-CreateParticle(400, 180, 3)
-CreateParticle(480, 120, 4)
-CreateParticle(520, 260, 3)
-CreateParticle(200, 300, 4)
-CreateParticle(350, 320, 3)
+CreateUltraSmoothParticle(60, 120, 4)
+CreateUltraSmoothParticle(140, 200, 3)
+CreateUltraSmoothParticle(280, 90, 5)
+CreateUltraSmoothParticle(400, 180, 3)
+CreateUltraSmoothParticle(480, 120, 4)
+CreateUltraSmoothParticle(520, 260, 3)
+CreateUltraSmoothParticle(200, 300, 4)
+CreateUltraSmoothParticle(350, 320, 3)
+
+RunService.RenderStepped:Connect(function()
+    local t = tick()
+    for _, d in ipairs(particleData) do
+        if d.frame.Parent then
+            local offX = math.sin(t * d.speedX + d.phase) * d.ampX
+            local offY = math.cos(t * d.speedY + d.phase2) * d.ampY
+            d.frame.Position = UDim2.new(0, d.baseX + offX, 0, d.baseY + offY)
+
+            local pulse = (math.sin(t * d.speedY * 0.8 + d.phase) + 1) / 2
+            d.frame.BackgroundTransparency = 0.35 + pulse * 0.4
+        end
+    end
+end)
 
 -- ============ ФУТЕР ============
 local Footer = Instance.new("TextLabel")
@@ -572,5 +641,5 @@ TweenService:Create(Shadow, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.Easin
     Position = UDim2.new(0.5, -300, 0.5, -165)
 }):Play()
 
-print("No One UI — Ultimate Neon Edition + Click Sound loaded.")
+print("No One UI — Part 2/2 loaded. Full UI ready!")
 print("Telegram: https://t.me/devscripts0")
