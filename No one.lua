@@ -1,4 +1,4 @@
--- No One | Part 1/2
+-- No One | Part 1/3
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
@@ -13,7 +13,6 @@ local TEXT_BRIGHT = Color3.fromRGB(240, 240, 245)
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "NoOneUI"
 ScreenGui.ResetOnSpawn = false
-ScreenGui.IgnoreGuiInset = true
 ScreenGui.Parent = CoreGui
 
 local ClickSound = Instance.new("Sound")
@@ -27,7 +26,7 @@ local function PlayClick()
     ClickSound:Play()
 end
 
--- ГЛАВНОЕ ОКНО
+-- ОКНО
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 600, 0, 350)
@@ -36,49 +35,23 @@ MainFrame.BackgroundColor3 = BG_DARK
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
 MainFrame.Draggable = true
-MainFrame.ZIndex = 10
 MainFrame.Parent = ScreenGui
 
 local MC = Instance.new("UICorner")
 MC.CornerRadius = UDim.new(0, 14)
 MC.Parent = MainFrame
 
-local InnerStroke = Instance.new("UIStroke")
-InnerStroke.Color = Color3.fromRGB(0, 80, 40)
-InnerStroke.Thickness = 1
-InnerStroke.Transparency = 0.3
-InnerStroke.Parent = MainFrame
-
 local MainStroke = Instance.new("UIStroke")
 MainStroke.Color = NEON
 MainStroke.Thickness = 1.5
-MainStroke.Transparency = 0.15
+MainStroke.Transparency = 0.3
 MainStroke.Parent = MainFrame
-
-local GlowStroke = Instance.new("UIStroke")
-GlowStroke.Color = NEON
-GlowStroke.Thickness = 6
-GlowStroke.Transparency = 0.9
-GlowStroke.Parent = MainFrame
-
-task.spawn(function()
-    while MainFrame.Parent do
-        TweenService:Create(GlowStroke, TweenInfo.new(2), {Transparency = 0.75}):Play()
-        TweenService:Create(MainStroke, TweenInfo.new(2), {Transparency = 0.05}):Play()
-        task.wait(2)
-        TweenService:Create(GlowStroke, TweenInfo.new(2), {Transparency = 0.95}):Play()
-        TweenService:Create(MainStroke, TweenInfo.new(2), {Transparency = 0.3}):Play()
-        task.wait(2)
-    end
-end)
 
 -- ТОПБАР
 local TopBar = Instance.new("Frame")
-TopBar.Size = UDim2.new(1, 0, 0, 60)
+TopBar.Size = UDim2.new(1, 0, 0, 55)
 TopBar.BackgroundColor3 = Color3.fromRGB(5, 5, 7)
-TopBar.BackgroundTransparency = 0.2
 TopBar.BorderSizePixel = 0
-TopBar.ZIndex = 2
 TopBar.Parent = MainFrame
 
 local TC = Instance.new("UICorner")
@@ -90,15 +63,13 @@ TopFix.Size = UDim2.new(1, 0, 0, 14)
 TopFix.Position = UDim2.new(0, 0, 1, -14)
 TopFix.BackgroundColor3 = Color3.fromRGB(5, 5, 7)
 TopFix.BorderSizePixel = 0
-TopFix.ZIndex = 3
 TopFix.Parent = TopBar
 
 local Sep = Instance.new("Frame")
 Sep.Size = UDim2.new(1, -20, 0, 1)
-Sep.Position = UDim2.new(0, 10, 0, 60)
+Sep.Position = UDim2.new(0, 10, 0, 55)
 Sep.BackgroundColor3 = NEON
 Sep.BorderSizePixel = 0
-Sep.ZIndex = 3
 Sep.Parent = MainFrame
 
 local SepGrad = Instance.new("UIGradient")
@@ -111,97 +82,33 @@ SepGrad.Parent = Sep
 
 -- ЗАГОЛОВОК
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(0, 300, 0, 32)
-Title.Position = UDim2.new(0, 25, 0, 8)
+Title.Size = UDim2.new(0, 300, 0, 30)
+Title.Position = UDim2.new(0, 25, 0, 5)
 Title.BackgroundTransparency = 1
 Title.Text = "No One"
-Title.TextColor3 = Color3.new(1, 1, 1)
+Title.TextColor3 = NEON
 Title.TextSize = 26
 Title.Font = Enum.Font.GothamBlack
 Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.ZIndex = 4
 Title.Parent = TopBar
-
-local TitleGrad = Instance.new("UIGradient")
-TitleGrad.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0.00, Color3.fromRGB(120, 255, 160)),
-    ColorSequenceKeypoint.new(0.25, Color3.fromRGB(0, 255, 100)),
-    ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 180, 70)),
-    ColorSequenceKeypoint.new(0.75, Color3.fromRGB(0, 255, 100)),
-    ColorSequenceKeypoint.new(1.00, Color3.fromRGB(120, 255, 160))
-})
-TitleGrad.Rotation = 45
-TitleGrad.Parent = Title
-
-task.spawn(function()
-    while Title.Parent do
-        TweenService:Create(TitleGrad, TweenInfo.new(3, Enum.EasingStyle.Linear), {Rotation = 405}):Play()
-        task.wait(3)
-    end
-end)
-
-local TIS = Instance.new("UIStroke")
-TIS.Color = Color3.fromRGB(0, 60, 25)
-TIS.Thickness = 2
-TIS.Transparency = 0.2
-TIS.Parent = Title
-
-local TG = Instance.new("UIStroke")
-TG.Color = NEON
-TG.Thickness = 4
-TG.Transparency = 0.7
-TG.Parent = Title
-
-task.spawn(function()
-    while Title.Parent do
-        TweenService:Create(TG, TweenInfo.new(1.5), {Transparency = 0.4, Thickness = 5}):Play()
-        task.wait(1.5)
-        TweenService:Create(TG, TweenInfo.new(1.5), {Transparency = 0.8, Thickness = 3}):Play()
-        task.wait(1.5)
-    end
-end)
 
 local Subtitle = Instance.new("TextLabel")
 Subtitle.Size = UDim2.new(0, 300, 0, 14)
-Subtitle.Position = UDim2.new(0, 27, 0, 40)
+Subtitle.Position = UDim2.new(0, 27, 0, 35)
 Subtitle.BackgroundTransparency = 1
 Subtitle.Text = "by devscripts0"
 Subtitle.TextColor3 = Color3.fromRGB(0, 130, 60)
 Subtitle.TextSize = 11
 Subtitle.Font = Enum.Font.GothamMedium
 Subtitle.TextXAlignment = Enum.TextXAlignment.Left
-Subtitle.ZIndex = 4
 Subtitle.Parent = TopBar
-
-local Dot = Instance.new("Frame")
-Dot.Size = UDim2.new(0, 9, 0, 9)
-Dot.Position = UDim2.new(0, 220, 0.5, -4)
-Dot.BackgroundColor3 = NEON
-Dot.BorderSizePixel = 0
-Dot.ZIndex = 4
-Dot.Parent = TopBar
-
-local DotCorner = Instance.new("UICorner")
-DotCorner.CornerRadius = UDim.new(1, 0)
-DotCorner.Parent = Dot
-
-task.spawn(function()
-    while Dot.Parent do
-        TweenService:Create(Dot, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundTransparency = 0.8, Size = UDim2.new(0, 7, 0, 7)}):Play()
-        task.wait(1)
-        TweenService:Create(Dot, TweenInfo.new(1, Enum.EasingStyle.Sine), {BackgroundTransparency = 0, Size = UDim2.new(0, 9, 0, 9)}):Play()
-        task.wait(1)
-    end
-end)
 
 -- SIDEBAR
 local SideBar = Instance.new("Frame")
-SideBar.Size = UDim2.new(0, 170, 1, -61)
-SideBar.Position = UDim2.new(0, 0, 0, 61)
+SideBar.Size = UDim2.new(0, 170, 1, -56)
+SideBar.Position = UDim2.new(0, 0, 0, 56)
 SideBar.BackgroundColor3 = Color3.fromRGB(8, 8, 10)
-SideBar.BackgroundTransparency = 0.4
 SideBar.BorderSizePixel = 0
-SideBar.ZIndex = 2
 SideBar.Parent = MainFrame
 
 local SideLine = Instance.new("Frame")
@@ -210,18 +117,17 @@ SideLine.Position = UDim2.new(1, -1, 0, 15)
 SideLine.BackgroundColor3 = NEON
 SideLine.BackgroundTransparency = 0.7
 SideLine.BorderSizePixel = 0
-SideLine.ZIndex = 3
 SideLine.Parent = SideBar
 
 -- CONTENT
 local ContentFrame = Instance.new("Frame")
-ContentFrame.Size = UDim2.new(1, -170, 1, -61)
-ContentFrame.Position = UDim2.new(0, 170, 0, 61)
+ContentFrame.Size = UDim2.new(1, -170, 1, -56)
+ContentFrame.Position = UDim2.new(0, 170, 0, 56)
 ContentFrame.BackgroundTransparency = 1
 ContentFrame.ClipsDescendants = true
-ContentFrame.ZIndex = 2
 ContentFrame.Parent = MainFrame
 
+-- СТРАНИЦЫ
 local Pages = {}
 local function MakePage(name)
     local page = Instance.new("Frame")
@@ -229,7 +135,6 @@ local function MakePage(name)
     page.Size = UDim2.new(1, 0, 1, 0)
     page.BackgroundTransparency = 1
     page.Visible = false
-    page.ZIndex = 3
     page.Parent = ContentFrame
     Pages[name] = page
     return page
@@ -239,22 +144,17 @@ local MainPage = MakePage("Main")
 local VisualPage = MakePage("Visual")
 local SkinPage = MakePage("SkinChanger")
 
+-- ЗАГОЛОВКИ СТРАНИЦ
 local function MakeHeader(page, title, sub, icon)
     local iconBg = Instance.new("Frame")
     iconBg.Size = UDim2.new(0, 28, 0, 28)
     iconBg.Position = UDim2.new(0, 20, 0, 18)
     iconBg.BackgroundColor3 = Color3.fromRGB(0, 40, 20)
     iconBg.BorderSizePixel = 0
-    iconBg.ZIndex = 4
     iconBg.Parent = page
     local ibc = Instance.new("UICorner")
     ibc.CornerRadius = UDim.new(1, 0)
     ibc.Parent = iconBg
-    local ibs = Instance.new("UIStroke")
-    ibs.Color = NEON
-    ibs.Thickness = 1
-    ibs.Transparency = 0.3
-    ibs.Parent = iconBg
     local il = Instance.new("TextLabel")
     il.Size = UDim2.new(1, 0, 1, 0)
     il.BackgroundTransparency = 1
@@ -262,7 +162,6 @@ local function MakeHeader(page, title, sub, icon)
     il.TextColor3 = NEON
     il.TextSize = 14
     il.Font = Enum.Font.GothamBold
-    il.ZIndex = 5
     il.Parent = iconBg
 
     local h = Instance.new("TextLabel")
@@ -274,7 +173,6 @@ local function MakeHeader(page, title, sub, icon)
     h.TextSize = 18
     h.Font = Enum.Font.GothamBold
     h.TextXAlignment = Enum.TextXAlignment.Left
-    h.ZIndex = 4
     h.Parent = page
 
     local s = Instance.new("TextLabel")
@@ -286,7 +184,6 @@ local function MakeHeader(page, title, sub, icon)
     s.TextSize = 11
     s.Font = Enum.Font.Gotham
     s.TextXAlignment = Enum.TextXAlignment.Left
-    s.ZIndex = 4
     s.Parent = page
 
     local line = Instance.new("Frame")
@@ -294,7 +191,6 @@ local function MakeHeader(page, title, sub, icon)
     line.Position = UDim2.new(0, 20, 0, 62)
     line.BackgroundColor3 = Color3.fromRGB(30, 40, 32)
     line.BorderSizePixel = 0
-    line.ZIndex = 4
     line.Parent = page
 end
 
@@ -302,8 +198,47 @@ MakeHeader(MainPage, "Main", "Aim, weapons and movement", "⚙")
 MakeHeader(VisualPage, "Visual", "ESP, tracers and outlines", "👁")
 MakeHeader(SkinPage, "Skin Changer", "Skins, knives and cosmetics", "🎨")
 
--- ФУНКЦИЯ ДЛИННОГО ТУМБЛЕРА
-local function MakeLongToggle(parent, text, yPos, iconText)
+-- ФУТЕР
+local Footer = Instance.new("TextLabel")
+Footer.Size = UDim2.new(1, -20, 0, 20)
+Footer.Position = UDim2.new(0, 10, 1, -24)
+Footer.BackgroundTransparency = 1
+Footer.Text = "No One  |  https://t.me/devscripts0"
+Footer.TextColor3 = Color3.fromRGB(0, 150, 60)
+Footer.TextSize = 11
+Footer.Font = Enum.Font.GothamMedium
+Footer.TextXAlignment = Enum.TextXAlignment.Right
+Footer.Parent = MainFrame
+
+_G.NoOneUI = {
+    ScreenGui = ScreenGui,
+    MainFrame = MainFrame,
+    SideBar = SideBar,
+    ContentFrame = ContentFrame,
+    Pages = Pages,
+    NEON = NEON,
+    TEXT_DIM = TEXT_DIM,
+    TEXT_BRIGHT = TEXT_BRIGHT,
+    PlayClick = PlayClick,
+    TweenService = TweenService,
+    VisualPage = VisualPage,
+}
+print("Part 1/3 loaded.")
+-- No One | Part 2/3
+local TweenService = game:GetService("TweenService")
+
+if not _G.NoOneUI then warn("Сначала Part 1!") return end
+
+local UI = _G.NoOneUI
+local SideBar = UI.SideBar
+local Pages = UI.Pages
+local NEON = UI.NEON
+local TEXT_DIM = UI.TEXT_DIM
+local PlayClick = UI.PlayClick
+local VisualPage = UI.VisualPage
+
+-- ФУНКЦИЯ КНОПКИ-ТУМБЛЕРА
+local function MakeToggle(parent, text, yPos, iconText)
     local Btn = Instance.new("TextButton")
     Btn.Size = UDim2.new(1, -40, 0, 50)
     Btn.Position = UDim2.new(0, 20, 0, yPos)
@@ -311,7 +246,6 @@ local function MakeLongToggle(parent, text, yPos, iconText)
     Btn.BorderSizePixel = 0
     Btn.Text = ""
     Btn.AutoButtonColor = false
-    Btn.ZIndex = 5
     Btn.Parent = parent
 
     local C = Instance.new("UICorner")
@@ -329,16 +263,10 @@ local function MakeLongToggle(parent, text, yPos, iconText)
     IconBg.Position = UDim2.new(0, 10, 0.5, -16)
     IconBg.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
     IconBg.BorderSizePixel = 0
-    IconBg.ZIndex = 6
     IconBg.Parent = Btn
     local ibc = Instance.new("UICorner")
     ibc.CornerRadius = UDim.new(1, 0)
     ibc.Parent = IconBg
-    local ibs = Instance.new("UIStroke")
-    ibs.Color = Color3.fromRGB(60, 60, 60)
-    ibs.Thickness = 1
-    ibs.Transparency = 0.4
-    ibs.Parent = IconBg
 
     local IL = Instance.new("TextLabel")
     IL.Size = UDim2.new(1, 0, 1, 0)
@@ -347,7 +275,6 @@ local function MakeLongToggle(parent, text, yPos, iconText)
     IL.TextColor3 = Color3.fromRGB(200, 200, 200)
     IL.TextSize = 16
     IL.Font = Enum.Font.Gotham
-    IL.ZIndex = 7
     IL.Parent = IconBg
 
     local TL = Instance.new("TextLabel")
@@ -359,7 +286,6 @@ local function MakeLongToggle(parent, text, yPos, iconText)
     TL.TextSize = 15
     TL.Font = Enum.Font.GothamBold
     TL.TextXAlignment = Enum.TextXAlignment.Left
-    TL.ZIndex = 6
     TL.Parent = Btn
 
     local StateDot = Instance.new("Frame")
@@ -367,7 +293,6 @@ local function MakeLongToggle(parent, text, yPos, iconText)
     StateDot.Position = UDim2.new(1, -25, 0.5, -5)
     StateDot.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
     StateDot.BorderSizePixel = 0
-    StateDot.ZIndex = 6
     StateDot.Parent = Btn
     local sdc = Instance.new("UICorner")
     sdc.CornerRadius = UDim.new(1, 0)
@@ -382,16 +307,15 @@ local function MakeLongToggle(parent, text, yPos, iconText)
         end
     end)
 
-    return Btn, S, StateDot, IL, IconBg, ibs
+    return Btn, S, StateDot, IL, IconBg
 end
 
-local ESPBtn, ESPStroke, ESPDot, ESPIcon, ESPIconBg, ESPIconStroke = MakeLongToggle(VisualPage, "ESP", 85, "🎯")
-local TracersBtn, TracersStroke, TracersDot, TracersIcon, TracersIconBg, TracersIconStroke = MakeLongToggle(VisualPage, "TRACERS", 145, "📡")
+local ESPBtn, ESPStroke, ESPDot, ESPIcon, ESPIconBg = MakeToggle(VisualPage, "ESP", 85, "🎯")
+local TracersBtn, TracersStroke, TracersDot, TracersIcon, TracersIconBg = MakeToggle(VisualPage, "TRACERS", 145, "📡")
 
 -- ВКЛАДКИ
 local function CreateTabButton(name, icon, yOffset)
     local Btn = Instance.new("TextButton")
-    Btn.Name = name .. "Tab"
     Btn.Size = UDim2.new(1, -20, 0, 44)
     Btn.Position = UDim2.new(0, 10, 0, yOffset)
     Btn.BackgroundColor3 = Color3.fromRGB(0, 70, 30)
@@ -399,7 +323,6 @@ local function CreateTabButton(name, icon, yOffset)
     Btn.BorderSizePixel = 0
     Btn.Text = ""
     Btn.AutoButtonColor = false
-    Btn.ZIndex = 4
     Btn.Parent = SideBar
 
     local C = Instance.new("UICorner")
@@ -412,56 +335,36 @@ local function CreateTabButton(name, icon, yOffset)
     Ind.BackgroundColor3 = NEON
     Ind.BackgroundTransparency = 1
     Ind.BorderSizePixel = 0
-    Ind.ZIndex = 5
     Ind.Parent = Btn
     local IC = Instance.new("UICorner")
     IC.CornerRadius = UDim.new(1, 0)
     IC.Parent = Ind
 
-    local IconBg = Instance.new("Frame")
-    IconBg.Size = UDim2.new(0, 30, 0, 30)
-    IconBg.Position = UDim2.new(0, 15, 0.5, -15)
-    IconBg.BackgroundColor3 = Color3.fromRGB(20, 20, 24)
-    IconBg.BorderSizePixel = 0
-    IconBg.ZIndex = 4
-    IconBg.Parent = Btn
-    local IBC = Instance.new("UICorner")
-    IBC.CornerRadius = UDim.new(1, 0)
-    IBC.Parent = IconBg
-
-    local IBS = Instance.new("UIStroke")
-    IBS.Color = Color3.fromRGB(40, 50, 42)
-    IBS.Thickness = 1
-    IBS.Transparency = 0.3
-    IBS.Parent = IconBg
-
     local IL = Instance.new("TextLabel")
-    IL.Size = UDim2.new(1, 0, 1, 0)
+    IL.Size = UDim2.new(0, 30, 1, 0)
+    IL.Position = UDim2.new(0, 15, 0, 0)
     IL.BackgroundTransparency = 1
     IL.Text = icon
     IL.TextColor3 = Color3.fromRGB(0, 200, 90)
     IL.TextSize = 16
     IL.Font = Enum.Font.Gotham
-    IL.ZIndex = 5
-    IL.Parent = IconBg
+    IL.Parent = Btn
 
     local TL = Instance.new("TextLabel")
     TL.Size = UDim2.new(0, 110, 1, 0)
-    TL.Position = UDim2.new(0, 58, 0, 0)
+    TL.Position = UDim2.new(0, 50, 0, 0)
     TL.BackgroundTransparency = 1
     TL.Text = name
     TL.TextColor3 = TEXT_DIM
     TL.TextSize = 15
     TL.Font = Enum.Font.GothamMedium
     TL.TextXAlignment = Enum.TextXAlignment.Left
-    TL.ZIndex = 5
     TL.Parent = Btn
 
     Btn.MouseEnter:Connect(function()
         if Btn.BackgroundTransparency == 1 then
             TweenService:Create(Btn, TweenInfo.new(0.25), {BackgroundTransparency = 0.85, BackgroundColor3 = Color3.fromRGB(0, 90, 40)}):Play()
             TweenService:Create(TL, TweenInfo.new(0.25), {TextColor3 = Color3.fromRGB(0, 255, 110)}):Play()
-            TweenService:Create(IBS, TweenInfo.new(0.25), {Color = NEON, Transparency = 0}):Play()
         end
     end)
 
@@ -469,7 +372,6 @@ local function CreateTabButton(name, icon, yOffset)
         if Ind.BackgroundTransparency == 1 then
             TweenService:Create(Btn, TweenInfo.new(0.25), {BackgroundTransparency = 1}):Play()
             TweenService:Create(TL, TweenInfo.new(0.25), {TextColor3 = TEXT_DIM}):Play()
-            TweenService:Create(IBS, TweenInfo.new(0.25), {Color = Color3.fromRGB(40, 50, 42), Transparency = 0.3}):Play()
         end
     end)
 
@@ -477,7 +379,7 @@ local function CreateTabButton(name, icon, yOffset)
         PlayClick()
     end)
 
-    return Btn, TL, Ind, IL, IBS, IconBg
+    return Btn, TL, Ind
 end
 
 local Tabs = {
@@ -501,16 +403,6 @@ local function ActivateTab(tabName)
         TweenService:Create(data.Indicator, TweenInfo.new(0.3), {
             BackgroundTransparency = act and 0 or 1
         }):Play()
-        TweenService:Create(data.IconLabel, TweenInfo.new(0.3), {
-            TextColor3 = act and Color3.fromRGB(0, 255, 110) or Color3.fromRGB(0, 180, 80)
-        }):Play()
-        TweenService:Create(data.IconBg, TweenInfo.new(0.3), {
-            BackgroundColor3 = act and Color3.fromRGB(0, 35, 18) or Color3.fromRGB(20, 20, 24)
-        }):Play()
-        TweenService:Create(data.IconBgStroke, TweenInfo.new(0.3), {
-            Color = act and NEON or Color3.fromRGB(40, 50, 42),
-            Transparency = act and 0 or 0.3
-        }):Play()
 
         if data.Page and Pages[data.Page] then
             Pages[data.Page].Visible = act
@@ -519,10 +411,9 @@ local function ActivateTab(tabName)
 end
 
 for _, t in ipairs(Tabs) do
-    local b, l, i, il, ibs, ibg = CreateTabButton(t.Name, t.Icon, t.Offset)
+    local b, l, i = CreateTabButton(t.Name, t.Icon, t.Offset)
     TabButtons[t.Name] = {
-        Button=b, Label=l, Indicator=i, IconLabel=il,
-        IconBgStroke=ibs, IconBg=ibg, Page=t.Page
+        Button=b, Label=l, Indicator=i, Page=t.Page
     }
     b.MouseButton1Click:Connect(function()
         ActivateTab(t.Name)
@@ -531,76 +422,44 @@ end
 
 ActivateTab("Main")
 
--- ФУТЕР
-local Footer = Instance.new("TextLabel")
-Footer.Size = UDim2.new(1, -20, 0, 20)
-Footer.Position = UDim2.new(0, 10, 1, -24)
-Footer.BackgroundTransparency = 1
-Footer.Text = "No One  |  https://t.me/devscripts0"
-Footer.TextColor3 = Color3.fromRGB(0, 150, 60)
-Footer.TextSize = 11
-Footer.Font = Enum.Font.GothamMedium
-Footer.TextXAlignment = Enum.TextXAlignment.Right
-Footer.ZIndex = 10
-Footer.Parent = MainFrame
+UI.ESPBtn = ESPBtn
+UI.ESPStroke = ESPStroke
+UI.ESPDot = ESPDot
+UI.ESPIcon = ESPIcon
+UI.ESPIconBg = ESPIconBg
+UI.TracersBtn = TracersBtn
+UI.TracersStroke = TracersStroke
+UI.TracersDot = TracersDot
+UI.TracersIcon = TracersIcon
+UI.TracersIconBg = TracersIconBg
 
--- АНИМАЦИЯ ПОЯВЛЕНИЯ
-MainFrame.Size = UDim2.new(0, 0, 0, 0)
-MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-
-TweenService:Create(MainFrame, TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 600, 0, 350),
-    Position = UDim2.new(0.5, -300, 0.5, -175)
-}):Play()
-
--- СОХРАНЯЕМ ССЫЛКИ ДЛЯ ЧАСТИ 2
-_G.NoOneUI_Refs = {
-    ESPBtn = ESPBtn,
-    ESPStroke = ESPStroke,
-    ESPDot = ESPDot,
-    ESPIcon = ESPIcon,
-    ESPIconBg = ESPIconBg,
-    ESPIconStroke = ESPIconStroke,
-    TracersBtn = TracersBtn,
-    TracersStroke = TracersStroke,
-    TracersDot = TracersDot,
-    TracersIcon = TracersIcon,
-    TracersIconBg = TracersIconBg,
-    TracersIconStroke = TracersIconStroke,
-    PlayClick = PlayClick,
-    NEON = NEON,
-    MainFrame = MainFrame,
-}
-
-print("Part 1/2 loaded.")
--- No One | Part 2/2
+print("Part 2/3 loaded.")
+-- No One | Part 3/3
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
-local Refs = _G.NoOneUI_Refs
-if not Refs then warn("Сначала запусти Part 1!") return end
+if not _G.NoOneUI then warn("Сначала Part 1 и 2!") return end
 
-local ESPBtn = Refs.ESPBtn
-local ESPStroke = Refs.ESPStroke
-local ESPDot = Refs.ESPDot
-local ESPIcon = Refs.ESPIcon
-local ESPIconBg = Refs.ESPIconBg
-local ESPIconStroke = Refs.ESPIconStroke
+local UI = _G.NoOneUI
+local NEON = UI.NEON
+local PlayClick = UI.PlayClick
 
-local TracersBtn = Refs.TracersBtn
-local TracersStroke = Refs.TracersStroke
-local TracersDot = Refs.TracersDot
-local TracersIcon = Refs.TracersIcon
-local TracersIconBg = Refs.TracersIconBg
-local TracersIconStroke = Refs.TracersIconStroke
+local ESPBtn = UI.ESPBtn
+local ESPStroke = UI.ESPStroke
+local ESPDot = UI.ESPDot
+local ESPIcon = UI.ESPIcon
+local ESPIconBg = UI.ESPIconBg
 
-local PlayClick = Refs.PlayClick
-local NEON = Refs.NEON
+local TracersBtn = UI.TracersBtn
+local TracersStroke = UI.TracersStroke
+local TracersDot = UI.TracersDot
+local TracersIcon = UI.TracersIcon
+local TracersIconBg = UI.TracersIconBg
 
--- ЦВЕТА ESP
+-- ЦВЕТА
 local ESPColor_Team = Color3.fromRGB(0, 120, 255)
 local ESPColor_Enemy = Color3.fromRGB(255, 40, 40)
 
@@ -632,7 +491,7 @@ local function GetESPColor(player)
     end
 end
 
--- ESP через SelectionBox
+-- ESP
 local function CreateESP(player)
     if player == LocalPlayer then return end
     if ActiveESP[player] then return end
@@ -712,17 +571,6 @@ local function Setup(p)
         if ESPEnabled then RemoveESP(p) CreateESP(p) end
     end)
     p.CharacterRemoving:Connect(function() RemoveESP(p) end)
-
-    p:GetPropertyChangedSignal("Team"):Connect(function()
-        task.wait(0.1)
-        if ESPEnabled then
-            RemoveESP(p)
-            if p.Character then CreateESP(p) end
-        end
-        if Tracers[p] then
-            Tracers[p].Color = GetESPColor(p)
-        end
-    end)
 end
 
 for _, p in ipairs(Players:GetPlayers()) do Setup(p) end
@@ -730,30 +578,6 @@ Players.PlayerAdded:Connect(Setup)
 Players.PlayerRemoving:Connect(function(p)
     RemoveESP(p)
     RemoveTracer(p)
-end)
-
--- Периодическое обновление цвета
-task.spawn(function()
-    while Refs.MainFrame.Parent do
-        task.wait(1)
-        if ESPEnabled then
-            for p, data in pairs(ActiveESP) do
-                if p.Character then
-                    local newColor = GetESPColor(p)
-                    for _, box in ipairs(data.boxes) do
-                        if box.Parent then
-                            box.Color3 = newColor
-                        end
-                    end
-                end
-            end
-        end
-        if TracersEnabled then
-            for p, l in pairs(Tracers) do
-                l.Color = GetESPColor(p)
-            end
-        end
-    end
 end)
 
 -- РЕНДЕР TRACERS
@@ -784,7 +608,7 @@ end)
 -- ТУМБЛЕРЫ
 local twInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 
-local function SetToggle(Btn, Stroke, Dot, IconLabel, IconBg, IconStroke, on)
+local function SetToggle(Btn, Stroke, Dot, IconLabel, IconBg, on)
     Btn:SetAttribute("On", on)
     TweenService:Create(Btn, twInfo, {
         BackgroundColor3 = on and NEON or Color3.fromRGB(15, 15, 15)
@@ -802,27 +626,24 @@ local function SetToggle(Btn, Stroke, Dot, IconLabel, IconBg, IconStroke, on)
     TweenService:Create(IconBg, twInfo, {
         BackgroundColor3 = on and Color3.fromRGB(0, 60, 25) or Color3.fromRGB(30, 30, 35)
     }):Play()
-    TweenService:Create(IconStroke, twInfo, {
-        Color = on and Color3.fromRGB(0, 100, 40) or Color3.fromRGB(60, 60, 60)
-    }):Play()
 end
 
 ESPBtn.MouseButton1Click:Connect(function()
     PlayClick()
     ESPEnabled = not ESPEnabled
-    SetToggle(ESPBtn, ESPStroke, ESPDot, ESPIcon, ESPIconBg, ESPIconStroke, ESPEnabled)
+    SetToggle(ESPBtn, ESPStroke, ESPDot, ESPIcon, ESPIconBg, ESPEnabled)
     UpdateAll()
 end)
 
 TracersBtn.MouseButton1Click:Connect(function()
     PlayClick()
     TracersEnabled = not TracersEnabled
-    SetToggle(TracersBtn, TracersStroke, TracersDot, TracersIcon, TracersIconBg, TracersIconStroke, TracersEnabled)
+    SetToggle(TracersBtn, TracersStroke, TracersDot, TracersIcon, TracersIconBg, TracersEnabled)
     if not TracersEnabled then
         for _, l in pairs(Tracers) do l.Visible = false end
     end
     UpdateAll()
 end)
 
-print("Part 2/2 loaded. ESP + Tracers ready.")
+print("Part 3/3 loaded. ESP + Tracers ready.")
 print("Telegram: https://t.me/devscripts0")
